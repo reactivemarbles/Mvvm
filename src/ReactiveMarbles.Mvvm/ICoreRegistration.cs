@@ -5,12 +5,11 @@
 using System;
 using System.Reactive.Concurrency;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// Interface that represents core Reactive Marbles registration.
     /// </summary>
-    // TODO: [rlittlesii: August 21, 2021] RxApp could be Splat Regsitration
     public interface ICoreRegistration
     {
         /// <summary>

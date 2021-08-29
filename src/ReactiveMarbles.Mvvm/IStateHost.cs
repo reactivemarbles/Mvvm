@@ -5,7 +5,7 @@
 using System;
 using System.Reactive;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /* Nicked from http://caliburnmicro.codeplex.com/wikipage?title=Working%20with%20Windows%20Phone%207%20v1.1
      *

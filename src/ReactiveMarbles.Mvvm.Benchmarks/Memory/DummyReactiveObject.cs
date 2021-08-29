@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using DynamicData.Binding;
-using ReactiveMarbles.Core;
 using ReactiveUI;
 
 namespace ReactiveMarbles.Mvvm.Benchmarks.Memory

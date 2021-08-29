@@ -5,7 +5,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// Indicates that an object implementing <see cref="IThrownExceptions"/> has caused an error and nothing is attached

@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// <para>

@@ -5,7 +5,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// A reactive object is a interface for ViewModels which will expose

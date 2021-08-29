@@ -1,20 +1,19 @@
 <Project>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591;1701;1702;1705;VSX1000</NoWarn>
     <Platform>AnyCPU</Platform>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
     <DebugType>embedded</DebugType>
-    <Authors>Glenn Watson</Authors>
+    <Authors>ReactiveUI Association Inc</Authors>
     <Copyright>Copyright (c) 2021 ReactiveUI Association Inc</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/reactivemarbles/Core</PackageProjectUrl>
-    <PackageDescription>Allows to get an observables for property changed events.</PackageDescription>
+    <PackageProjectUrl>https://github.com/reactivemarbles/Mvvm</PackageProjectUrl>
+    <PackageDescription>Common base classes for the MVVM pattern for Reactive Marbles.</PackageDescription>
     <PackageIcon>logo.png</PackageIcon>
-    <Owners>glennawatson</Owners>
-    <PackageTags>system.reactive;propertychanged;inpc;reactive;functional</PackageTags>
-    <PackageReleaseNotes>https://github.com/reactivemarbles/Core/releases</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/reactivemarbles/Core</RepositoryUrl>
+    <Owners>glennawatson;rlittlesii</Owners>
+    <PackageTags>system.reactive;propertychanged;inpc;reactive;functional;mvvm</PackageTags>
+    <PackageReleaseNotes>https://github.com/reactivemarbles/Mvvm/releases</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/reactivemarbles/Mvvm</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->

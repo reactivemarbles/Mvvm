@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+        <PackageReference Include="ReactiveUI" Version="11.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,2 +1,2 @@
-# Reactive Marbles Core
-A light weight core package for Reactive Marbles to introduce framework abstractions
+# Reactive Marbles Mvvm
+A light weight mvvm package for Reactive Marbles to introduce framework abstractions

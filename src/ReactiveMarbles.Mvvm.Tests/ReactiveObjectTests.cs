@@ -270,81 +270,12 @@ namespace ReactiveMarbles.Mvvm.Tests
             // Assert.Equal("This is a test.", result.Message);
         }
 
-        /// <summary>
-        /// Tests the memory pressure.
-        /// </summary>
-        [Fact]
-        public void MemoryTest_RxObject()
-        {
-            // Given
-            LogTotalMemory();
-
-            var thing = Enumerable.Range(0, 4000)
-                .Select(x => new TestFixture())
-                .ToList();
-
-            LogTotalMemory();
-        }
-
-        /// <summary>
-        /// Tests the memory pressure.
-        /// </summary>
-        [Fact]
-        public void MemoryTest_ReactiveObject()
-        {
-            // Given
-            LogTotalMemory();
-
-            var thing = Enumerable.Range(0, 4000)
-                .Select(x => new ReactiveObjectFixture())
-                .ToList();
-
-            LogTotalMemory();
-        }
-
-        /// <summary>
-        /// Tests the memory pressure.
-        /// </summary>
-        [Fact]
-        public void MemoryTest_RxLessThenReactive()
-        {
-            // Given
-            var first = LogTotalMemory();
-
-            var thing = Enumerable.Range(0, 4000)
-                .Select(x => new TestFixture())
-                .ToList();
-
-            var second = LogTotalMemory();
-            thing = null;
-            GC.Collect();
-
-            var thing2 = Enumerable.Range(0, 4000)
-                .Select(x => new ReactiveObjectFixture())
-                .ToList();
-            thing2 = null;
-            GC.Collect();
-            var third = LogTotalMemory();
-
-            second
-                .Should()
-                .BeLessThan(third);
-        }
-
         private static void AssertCount(int expected, params ICollection[] collections)
         {
             foreach (var collection in collections)
             {
                 Assert.Equal(expected, collection.Count);
             }
-        }
-
-        private long LogTotalMemory()
-        {
-            GC.Collect();
-            var totalMemory = GC.GetTotalMemory(true);
-            _helper.WriteLine($"Total Memory: {totalMemory}");
-            return totalMemory;
         }
     }
 }

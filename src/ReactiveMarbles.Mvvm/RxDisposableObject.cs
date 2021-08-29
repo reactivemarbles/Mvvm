@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// Rx object that extends the <see cref="IDisposable"/> interface.

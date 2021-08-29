@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using DynamicData;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// ReactiveObject is the base object for ViewModel classes, and it
@@ -23,6 +23,8 @@ namespace ReactiveMarbles.Core
     /// </summary>
     public class RxObject : IRxObject
     {
+        // todo: <Rodney Littles II: August 29, 2021> Figure out how to get the locator involved.
+        // private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(() => new ScheduledSubject<Exception>(Scheduler.Immediate, ICoreRegistration.ExceptionHandler));
         private readonly Lazy<Subject<Exception>> _thrownExceptions = new(() => new Subject<Exception>(), LazyThreadSafetyMode.PublicationOnly);
         private readonly Lazy<Notifications> _notification = new(() => new Notifications());
 

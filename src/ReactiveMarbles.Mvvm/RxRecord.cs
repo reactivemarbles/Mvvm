@@ -5,9 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 
 namespace ReactiveMarbles.Core
@@ -19,6 +21,35 @@ namespace ReactiveMarbles.Core
     /// </summary>
     public record RxRecord : IRxObject
     {
+        private readonly Lazy<Subject<Exception>> _thrownExceptions = new(() => new Subject<Exception>(), LazyThreadSafetyMode.PublicationOnly);
+        private readonly Lazy<Subject<Unit>> _startOrStopDelayingChangeNotifications = new(() => new Subject<Unit>(), LazyThreadSafetyMode.PublicationOnly);
+        private long _changeNotificationsDelayed;
+        private long _changeNotificationsSuppressed;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RxRecord"/> class.
+        /// </summary>
+        public RxRecord()
+        {
+            Changed = Observable.Create<RxPropertyChangedEventArgs<IRxObject>>(observer =>
+            {
+                void Handler(object sender, PropertyChangedEventArgs args) =>
+                    observer.OnNext(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, (IRxObject)sender));
+
+                PropertyChanged += Handler;
+                return Disposable.Create(() => PropertyChanged -= Handler);
+            });
+
+            Changing = Observable.Create<RxPropertyChangingEventArgs<IRxObject>>(observer =>
+            {
+                void Handler(object sender, PropertyChangingEventArgs args) =>
+                    observer.OnNext(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, (IRxObject)sender));
+
+                PropertyChanging += Handler;
+                return Disposable.Create(() => PropertyChanging -= Handler);
+            });
+        }
+
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -26,33 +57,109 @@ namespace ReactiveMarbles.Core
         public event PropertyChangingEventHandler? PropertyChanging;
 
         /// <inheritdoc/>
-        Lazy<ISubject<Exception>> IRxObject.ThrownExceptionsInternal { get; } =
-            new(() => new Subject<Exception>());
+        public IObservable<Exception> ThrownExceptions => _thrownExceptions.Value;
 
         /// <inheritdoc/>
-        public IObservable<Exception> ThrownExceptions => ((IRxObject)this).ThrownExceptionsInternal.Value;
+        public IObservable<RxPropertyChangingEventArgs<IRxObject>> Changing { get; }
 
         /// <inheritdoc/>
-        Lazy<IRxObject.ChangeState> IRxObject.State { get; } = new(LazyThreadSafetyMode.PublicationOnly);
+        public IObservable<RxPropertyChangedEventArgs<IRxObject>> Changed { get; }
 
         /// <inheritdoc/>
-        void IRxObject.RaisePropertyChanging(PropertyChangingEventArgs args) =>
-            PropertyChanging?.Invoke(this, args);
-
-        /// <inheritdoc />
-        void IRxObject.RaisePropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
+        public bool AreChangeNotificationsEnabled() => Interlocked.Read(ref _changeNotificationsSuppressed) == 0;
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsEnabled() => ((IRxObject)this).AreChangeNotificationsEnabled();
+        public bool AreChangeNotificationsDelayed() => Interlocked.Read(ref _changeNotificationsDelayed) > 0;
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsDelayed() => ((IRxObject)this).AreChangeNotificationsDelayed();
+        public IDisposable SuppressChangeNotifications()
+        {
+            Interlocked.Increment(ref _changeNotificationsSuppressed);
+            return Disposable.Create(() => Interlocked.Decrement(ref _changeNotificationsSuppressed));
+        }
 
         /// <inheritdoc/>
-        public IDisposable DelayChangeNotifications() => ((IRxObject)this).DelayChangeNotifications();
+        public IDisposable DelayChangeNotifications()
+        {
+            if (Interlocked.Increment(ref _changeNotificationsDelayed) == 1)
+            {
+                if (_startOrStopDelayingChangeNotifications.IsValueCreated)
+                {
+                    _startOrStopDelayingChangeNotifications.Value.OnNext(Unit.Default);
+                }
+            }
 
-        /// <inheritdoc/>
-        public IDisposable SuppressChangeNotifications() => ((IRxObject)this).SuppressChangeNotifications();
+            return Disposable.Create(() =>
+            {
+                if (Interlocked.Decrement(ref _changeNotificationsDelayed) == 0)
+                {
+                    if (_startOrStopDelayingChangeNotifications.IsValueCreated)
+                    {
+                        _startOrStopDelayingChangeNotifications.Value.OnNext(Unit.Default);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Raises the property changing event.
+        /// </summary>
+        /// <param name="args">The argument.</param>
+        protected void RaisePropertyChanging(PropertyChangingEventArgs args) => PropertyChanging?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the property changed event.
+        /// </summary>
+        /// <param name="args">The argument.</param>
+        protected void RaisePropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises a property changed event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        protected virtual void RaisePropertyChanging([CallerMemberName] string propertyName = "")
+        {
+            if (!AreChangeNotificationsEnabled())
+            {
+                return;
+            }
+
+            try
+            {
+                RaisePropertyChanging(new PropertyChangingEventArgs(propertyName));
+            }
+            catch (Exception e)
+            {
+                if (_thrownExceptions.IsValueCreated)
+                {
+                    _thrownExceptions.Value.OnNext(e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Raises a property changed event.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has changed.</param>
+        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (!AreChangeNotificationsEnabled())
+            {
+                return;
+            }
+
+            try
+            {
+                RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception e)
+            {
+                if (_thrownExceptions.IsValueCreated)
+                {
+                    _thrownExceptions.Value.OnNext(e);
+                }
+            }
+        }
 
         /// <summary>
         /// RaiseAndSetIfChanged fully implements a Setter for a read-write
@@ -65,50 +172,24 @@ namespace ReactiveMarbles.Core
         /// <param name="newValue">The new value.</param>
         /// <param name="propertyName">The name of the property, usually
         /// automatically provided through the CallerMemberName attribute.</param>
-        // ReSharper disable once MemberHidesInterfaceMemberWithDefaultImplementation
         protected void RaiseAndSetIfChanged<T>(
             ref T backingField,
             T newValue,
             [CallerMemberName] string? propertyName = null)
         {
-            if (propertyName is not null)
+            if (propertyName is null)
             {
-                ((IRxObject)this).RaiseAndSetIfChanged(ref backingField, newValue, propertyName);
+                throw new ArgumentNullException(nameof(propertyName));
             }
-        }
 
-        /// <summary>
-        /// Use this method in your ReactiveObject classes when creating custom
-        /// properties where raiseAndSetIfChanged doesn't suffice.
-        /// </summary>
-        /// <param name="propertyName">
-        /// A string representing the name of the property that has been changed.
-        /// Leave <c>null</c> to let the runtime set to caller member name.
-        /// </param>
-        protected void RaisePropertyChanged(
-            [CallerMemberName] string? propertyName = null)
-        {
-            if (propertyName is not null)
+            if (EqualityComparer<T>.Default.Equals(backingField, newValue))
             {
-                ((IRxObject)this).RaisePropertyChanged(propertyName);
+                return;
             }
-        }
 
-        /// <summary>
-        /// Use this method in your ReactiveObject classes when creating custom
-        /// properties where raiseAndSetIfChanged doesn't suffice.
-        /// </summary>
-        /// <param name="propertyName">
-        /// A string representing the name of the property that has been changed.
-        /// Leave <c>null</c> to let the runtime set to caller member name.
-        /// </param>
-        protected void RaisePropertyChanging(
-            [CallerMemberName] string? propertyName = null)
-        {
-            if (propertyName is not null)
-            {
-                ((IRxObject)this).RaisePropertyChanging(propertyName);
-            }
+            RaisePropertyChanging(propertyName);
+            backingField = newValue;
+            RaisePropertyChanged(propertyName);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Core", "src\ReactiveMarbles.Core\ReactiveMarbles.Core.csproj", "{12FCC761-EA3D-4443-9D88-BE03B3D6C802}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Mvvm", "ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj", "{12FCC761-EA3D-4443-9D88-BE03B3D6C802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Core.Tests", "test\ReactiveMarbles.Core.Tests\ReactiveMarbles.Core.Tests.csproj", "{1179097F-2B50-4892-8FA7-CD2AFC5E6D3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Mvvm.Tests", "ReactiveMarbles.Mvvm.Tests\ReactiveMarbles.Mvvm.Tests.csproj", "{1179097F-2B50-4892-8FA7-CD2AFC5E6D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

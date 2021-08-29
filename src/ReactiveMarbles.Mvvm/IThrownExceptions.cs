@@ -1,5 +1,5 @@
-// Copyright (c) 2021 Reactive Marbles. All rights reserved.
-// The Reactive Marbles licenses this file to you under the MIT license.
+// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
@@ -20,7 +20,7 @@ namespace ReactiveMarbles.Core
     /// will appear on the UI thread and crash the application.
     /// </para>
     /// </summary>
-    public interface IHandleObservableErrors
+    public interface IThrownExceptions
     {
         /// <summary>
         /// Gets a observable which will fire whenever an exception would normally terminate.

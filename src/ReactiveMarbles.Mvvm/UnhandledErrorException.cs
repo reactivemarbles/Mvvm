@@ -1,5 +1,5 @@
-// Copyright (c) 2021 Reactive Marbles. All rights reserved.
-// The Reactive Marbles licenses this file to you under the MIT license.
+// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
@@ -8,8 +8,8 @@ using System.Runtime.Serialization;
 namespace ReactiveMarbles.Core
 {
     /// <summary>
-    /// Indicates that an object implementing <see cref="IHandleObservableErrors"/> has caused an error and nothing is attached
-    /// to <see cref="IHandleObservableErrors.ThrownExceptions"/> to handle that error.
+    /// Indicates that an object implementing <see cref="IThrownExceptions"/> has caused an error and nothing is attached
+    /// to <see cref="IThrownExceptions.ThrownExceptions"/> to handle that error.
     /// </summary>
     [Serializable]
     public class UnhandledErrorException : Exception

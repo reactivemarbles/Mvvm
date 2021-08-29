@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Mvvm.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Mvvm.Benchmarks", "ReactiveMarbles.Mvvm.Benchmarks\ReactiveMarbles.Mvvm.Benchmarks.csproj", "{16D18273-3F1A-4596-9324-0B6CC951E1BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Hosting", "ReactiveMarbles.Hosting\ReactiveMarbles.Hosting.csproj", "{065C2DB3-284D-461A-909D-1B2459C1E860}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{9A20F92E-36FE-4AA6-AC01-BBA202A757C0}"
 	ProjectSection(SolutionItems) = preProject
 		directory.build.props = directory.build.props
@@ -20,11 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{9A20F9
 		..\version.json = ..\version.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Hosting.Tests", "ReactiveMarbles.Hosting.Tests\ReactiveMarbles.Hosting.Tests.csproj", "{0DC37CC8-EDFD-40BC-AFF6-93859A874417}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.MarbleLocator", "ReactiveMarbles.MarbleLocator\ReactiveMarbles.MarbleLocator.csproj", "{2B51668C-479F-43F4-A730-4D3630BB5FC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.MarbleLocator", "ReactiveMarbles.MarbleLocator\ReactiveMarbles.MarbleLocator.csproj", "{2B51668C-479F-43F4-A730-4D3630BB5FC9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.MarbleLocator.Tests", "ReactiveMarbles.MarbleLocator.Tests\ReactiveMarbles.MarbleLocator.Tests.csproj", "{3BDA44FC-515F-447F-B2DB-72944B9155A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.MarbleLocator.Tests", "ReactiveMarbles.MarbleLocator.Tests\ReactiveMarbles.MarbleLocator.Tests.csproj", "{3BDA44FC-515F-447F-B2DB-72944B9155A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,14 +40,6 @@ Global
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{065C2DB3-284D-461A-909D-1B2459C1E860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{065C2DB3-284D-461A-909D-1B2459C1E860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{065C2DB3-284D-461A-909D-1B2459C1E860}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{065C2DB3-284D-461A-909D-1B2459C1E860}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DC37CC8-EDFD-40BC-AFF6-93859A874417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DC37CC8-EDFD-40BC-AFF6-93859A874417}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DC37CC8-EDFD-40BC-AFF6-93859A874417}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DC37CC8-EDFD-40BC-AFF6-93859A874417}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B51668C-479F-43F4-A730-4D3630BB5FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B51668C-479F-43F4-A730-4D3630BB5FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B51668C-479F-43F4-A730-4D3630BB5FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU

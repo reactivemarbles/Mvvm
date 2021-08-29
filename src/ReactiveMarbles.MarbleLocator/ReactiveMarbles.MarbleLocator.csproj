@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Update="**\*.cs" DependentUpon="I%(Filename).cs" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.7.21377.19" />
   </ItemGroup>
 
 </Project>

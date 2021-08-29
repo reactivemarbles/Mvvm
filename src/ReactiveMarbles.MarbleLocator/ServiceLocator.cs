@@ -35,7 +35,7 @@ namespace ReactiveMarbles.MarbleLocator
         /// <returns>
         /// A service object of type <paramref name="serviceType">serviceType</paramref>.   -or-  null if there is no service object of type <paramref name="serviceType">serviceType</paramref>.
         /// </returns>
-        public object GetService(Type serviceType) => 
+        public object GetService(Type serviceType) =>
             GetServices(serviceType).LastOrDefault()!;
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ReactiveMarbles.MarbleLocator
         /// <returns>
         ///   <c>true</c> if the specified service type has service; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasService(Type serviceType, string? contract = null) => 
+        public bool HasService(Type serviceType, string? contract = null) =>
             _store.ContainsKey((serviceType, contract ?? string.Empty));
 
         /// <summary>

@@ -11,10 +11,9 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DynamicData;
 using FluentAssertions;
-using ReactiveMarbles.Core;
+using ReactiveUI;
 using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace ReactiveMarbles.Mvvm.Tests
 {

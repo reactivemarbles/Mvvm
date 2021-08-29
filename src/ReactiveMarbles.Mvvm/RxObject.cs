@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -22,11 +23,8 @@ namespace ReactiveMarbles.Core
     /// </summary>
     public class RxObject : IRxObject
     {
-        private readonly SourceList<RxPropertyChangedEventArgs<IRxObject>> _propertyChangedEvents = new();
-        private readonly SourceList<RxPropertyChangingEventArgs<IRxObject>> _propertyChangingEvents = new();
         private readonly Lazy<Subject<Exception>> _thrownExceptions = new(() => new Subject<Exception>(), LazyThreadSafetyMode.PublicationOnly);
-        private long _changeNotificationsDelayed;
-        private long _changeNotificationsSuppressed;
+        private readonly Lazy<Notifications> _notification = new(() => new Notifications());
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RxObject"/> class.
@@ -68,39 +66,39 @@ namespace ReactiveMarbles.Core
         public IObservable<RxPropertyChangedEventArgs<IRxObject>> Changed { get; }
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsEnabled() => Interlocked.Read(ref _changeNotificationsSuppressed) == 0;
+        public bool AreChangeNotificationsEnabled() => !_notification.IsValueCreated || Interlocked.Read(ref _notification.Value.ChangeNotificationsSuppressed) == 0;
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsDelayed() => Interlocked.Read(ref _changeNotificationsDelayed) > 0;
+        public bool AreChangeNotificationsDelayed() => _notification.IsValueCreated && Interlocked.Read(ref _notification.Value.ChangeNotificationsDelayed) > 0;
 
         /// <inheritdoc/>
         public IDisposable SuppressChangeNotifications()
         {
-            Interlocked.Increment(ref _changeNotificationsSuppressed);
-            return Disposable.Create(() => Interlocked.Decrement(ref _changeNotificationsSuppressed));
+            Interlocked.Increment(ref _notification.Value.ChangeNotificationsSuppressed);
+            return Disposable.Create(() => Interlocked.Decrement(ref _notification.Value.ChangeNotificationsSuppressed));
         }
 
         /// <inheritdoc/>
         public IDisposable DelayChangeNotifications()
         {
-            Interlocked.Increment(ref _changeNotificationsDelayed);
+            Interlocked.Increment(ref _notification.Value.ChangeNotificationsDelayed);
 
             return Disposable.Create(() =>
             {
-                if (Interlocked.Decrement(ref _changeNotificationsDelayed) == 0)
+                if (Interlocked.Decrement(ref _notification.Value.ChangeNotificationsDelayed) == 0)
                 {
-                    foreach (var distinctEvent in DistinctEvents(_propertyChangingEvents.Items.ToList()))
+                    foreach (var distinctEvent in DistinctEvents(_notification.Value.PropertyChangingEvents.Items.ToList()))
                     {
                         PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(distinctEvent.PropertyName));
                     }
 
-                    foreach (var distinctEvent in DistinctEvents(_propertyChangedEvents.Items.ToList()))
+                    foreach (var distinctEvent in DistinctEvents(_notification.Value.PropertyChangedEvents.Items.ToList()))
                     {
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(distinctEvent.PropertyName));
                     }
 
-                    _propertyChangedEvents.Clear();
-                    _propertyChangingEvents.Clear();
+                    _notification.Value.PropertyChangingEvents.Clear();
+                    _notification.Value.PropertyChangedEvents.Clear();
                 }
             });
         }
@@ -118,7 +116,7 @@ namespace ReactiveMarbles.Core
 
             if (AreChangeNotificationsDelayed())
             {
-                _propertyChangingEvents.Add(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, this));
+                _notification.Value.PropertyChangingEvents.Add(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, this));
                 return;
             }
 
@@ -148,7 +146,7 @@ namespace ReactiveMarbles.Core
 
             if (AreChangeNotificationsDelayed())
             {
-                _propertyChangedEvents.Add(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, this));
+                _notification.Value.PropertyChangedEvents.Add(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, this));
                 return;
             }
 
@@ -233,6 +231,15 @@ namespace ReactiveMarbles.Core
 
             // Stack enumerates in LIFO order
             return uniqueEvents;
+        }
+
+        [SuppressMessage("StyleCop", "SA1401", Justification = "Deliberate use of private field")]
+        private class Notifications
+        {
+            public readonly SourceList<RxPropertyChangedEventArgs<IRxObject>> PropertyChangedEvents = new();
+            public readonly SourceList<RxPropertyChangingEventArgs<IRxObject>> PropertyChangingEvents = new();
+            public long ChangeNotificationsDelayed = 0;
+            public long ChangeNotificationsSuppressed = 0;
         }
     }
 }

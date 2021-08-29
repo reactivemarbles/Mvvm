@@ -8,8 +8,8 @@ using System.Runtime.Serialization;
 namespace ReactiveMarbles.Core
 {
     /// <summary>
-    /// Indicates that an object implementing <see cref="IHandleObservableErrors"/> has caused an error and nothing is attached
-    /// to <see cref="IHandleObservableErrors.ThrownExceptions"/> to handle that error.
+    /// Indicates that an object implementing <see cref="IThrownExceptions"/> has caused an error and nothing is attached
+    /// to <see cref="IThrownExceptions.ThrownExceptions"/> to handle that error.
     /// </summary>
     [Serializable]
     public class UnhandledErrorException : Exception

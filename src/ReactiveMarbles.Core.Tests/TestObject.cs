@@ -7,7 +7,7 @@ namespace ReactiveMarbles.Core.Tests
     /// <summary>
     /// Test the thing.
     /// </summary>
-    public class TestObject : ReactiveObject
+    public class TestObject : RxObject
     {
         private string _testProperty = string.Empty;
 

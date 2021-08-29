@@ -15,7 +15,7 @@ namespace ReactiveMarbles.Core
     /// implements INotifyPropertyChanged. In addition, ReactiveObject provides
     /// Changing and Changed Observables to monitor object changes.
     /// </summary>
-    public class ReactiveObject : IReactiveObject
+    public class RxObject : IRxObject
     {
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -24,33 +24,33 @@ namespace ReactiveMarbles.Core
         public event PropertyChangingEventHandler? PropertyChanging;
 
         /// <inheritdoc/>
-        Lazy<ISubject<Exception>> IReactiveObject.ThrownExceptionsInternal { get; } =
+        Lazy<ISubject<Exception>> IRxObject.ThrownExceptionsInternal { get; } =
             new(() => new Subject<Exception>());
 
         /// <inheritdoc/>
-        public IObservable<Exception> ThrownExceptions => ((IReactiveObject)this).ThrownExceptionsInternal.Value;
+        public IObservable<Exception> ThrownExceptions => ((IRxObject)this).ThrownExceptionsInternal.Value;
 
         /// <inheritdoc/>
-        Lazy<IReactiveObject.ChangeState> IReactiveObject.State { get; } = new(LazyThreadSafetyMode.PublicationOnly);
+        Lazy<IRxObject.ChangeState> IRxObject.State { get; } = new(LazyThreadSafetyMode.PublicationOnly);
 
         /// <inheritdoc/>
-        void IReactiveObject.RaisePropertyChanging(PropertyChangingEventArgs args) =>
+        void IRxObject.RaisePropertyChanging(PropertyChangingEventArgs args) =>
             PropertyChanging?.Invoke(this, args);
 
         /// <inheritdoc />
-        void IReactiveObject.RaisePropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
+        void IRxObject.RaisePropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsEnabled() => ((IReactiveObject)this).AreChangeNotificationsEnabled();
+        public bool AreChangeNotificationsEnabled() => ((IRxObject)this).AreChangeNotificationsEnabled();
 
         /// <inheritdoc/>
-        public bool AreChangeNotificationsDelayed() => ((IReactiveObject)this).AreChangeNotificationsDelayed();
+        public bool AreChangeNotificationsDelayed() => ((IRxObject)this).AreChangeNotificationsDelayed();
 
         /// <inheritdoc/>
-        public IDisposable DelayChangeNotifications() => ((IReactiveObject)this).DelayChangeNotifications();
+        public IDisposable DelayChangeNotifications() => ((IRxObject)this).DelayChangeNotifications();
 
         /// <inheritdoc/>
-        public IDisposable SuppressChangeNotifications() => ((IReactiveObject)this).SuppressChangeNotifications();
+        public IDisposable SuppressChangeNotifications() => ((IRxObject)this).SuppressChangeNotifications();
 
         /// <summary>
         /// RaiseAndSetIfChanged fully implements a Setter for a read-write
@@ -71,7 +71,7 @@ namespace ReactiveMarbles.Core
         {
             if (propertyName is not null)
             {
-                ((IReactiveObject)this).RaiseAndSetIfChanged(ref backingField, newValue, propertyName);
+                ((IRxObject)this).RaiseAndSetIfChanged(ref backingField, newValue, propertyName);
             }
         }
 
@@ -88,7 +88,7 @@ namespace ReactiveMarbles.Core
         {
             if (propertyName is not null)
             {
-                ((IReactiveObject)this).RaisePropertyChanged(propertyName);
+                ((IRxObject)this).RaisePropertyChanged(propertyName);
             }
         }
 
@@ -105,7 +105,7 @@ namespace ReactiveMarbles.Core
         {
             if (propertyName is not null)
             {
-                ((IReactiveObject)this).RaisePropertyChanging(propertyName);
+                ((IRxObject)this).RaisePropertyChanging(propertyName);
             }
         }
     }

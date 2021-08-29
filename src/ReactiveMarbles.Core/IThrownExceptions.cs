@@ -20,7 +20,7 @@ namespace ReactiveMarbles.Core
     /// will appear on the UI thread and crash the application.
     /// </para>
     /// </summary>
-    public interface IHandleObservableErrors
+    public interface IThrownExceptions
     {
         /// <summary>
         /// Gets a observable which will fire whenever an exception would normally terminate.

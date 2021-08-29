@@ -12,7 +12,7 @@ namespace ReactiveMarbles.Core
     /// storage. Most platforms have a basic implementation of this class, but you
     /// probably want to write your own.
     /// </summary>
-    public interface ISuspensionDriver
+    public interface IStateHandler
     {
         /// <summary>
         /// Loads the application state from persistent storage.

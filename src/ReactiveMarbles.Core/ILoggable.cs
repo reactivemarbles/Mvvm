@@ -4,12 +4,10 @@
 
 namespace ReactiveMarbles.Core
 {
-    // TODO: [rlittlesii: August 21, 2021] Bridge splat logger
-
     /// <summary>
     /// Marker interface for classes that want access to the underlying framework logger.
     /// </summary>
-    public interface IEnableLogger
+    public interface ILoggable
     {
     }
 }

@@ -7,7 +7,7 @@ using Xunit;
 namespace ReactiveMarbles.Core.Tests
 {
     /// <summary>
-    /// Tests functionality of the <see cref="ReactiveObject"/>.
+    /// Tests functionality of the <see cref="RxObject"/>.
     /// </summary>
     public class ReactiveObjectTests
     {

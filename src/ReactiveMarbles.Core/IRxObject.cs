@@ -20,7 +20,7 @@ namespace ReactiveMarbles.Core
     /// The primary use of this interface is to allow external classes such as
     /// the ObservableAsPropertyHelper to trigger these events inside the ViewModel.
     /// </summary>
-    public interface IReactiveObject : INotifyPropertyChanged, INotifyPropertyChanging
+    public interface IRxObject : INotifyPropertyChanged, INotifyPropertyChanging
     {
         /// <summary>
         /// Gets internal thrown exceptions.
@@ -187,7 +187,7 @@ namespace ReactiveMarbles.Core
         }
 
         /// <summary>
-        /// Represents the changed state of an <see cref="IReactiveObject"/>.
+        /// Represents the changed state of an <see cref="IRxObject"/>.
         /// </summary>
         [SuppressMessage("SA1401", "SA1401", Justification = "Deliberate Field usage for default interface implementation.")]
         protected internal class ChangeState

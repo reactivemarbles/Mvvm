@@ -12,7 +12,7 @@ using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace ReactiveMarbles.Core
+namespace ReactiveMarbles.Mvvm
 {
     /// <summary>
     /// ReactiveRecord is the base object for ViewModel classes, and it

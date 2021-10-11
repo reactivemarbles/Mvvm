@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-      <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
+      <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
       <LangVersion>latest</LangVersion>
       <PackageDescription>A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable MVVM components that run on any mobile or desktop platform. This is the base package with the base platform implementations</PackageDescription>
       <Nullable>enable</Nullable>
@@ -10,6 +10,7 @@
     <ItemGroup>
       <PackageReference Include="DynamicData" Version="7.3.1" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+      <PackageReference Include="ReactiveMarbles.Locator" Version="1.1.1" />
       <PackageReference Include="System.Reactive" Version="5.0.0" />
     </ItemGroup>
 

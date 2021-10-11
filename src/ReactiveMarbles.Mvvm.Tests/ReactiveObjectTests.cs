@@ -11,6 +11,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DynamicData;
 using FluentAssertions;
+using ReactiveMarbles.Locator;
 using ReactiveUI;
 using Xunit;
 using Xunit.Abstractions;
@@ -28,7 +29,11 @@ namespace ReactiveMarbles.Mvvm.Tests
         /// Initializes a new instance of the <see cref="ReactiveObjectTests"/> class.
         /// </summary>
         /// <param name="testOutputHelper">The helper.</param>
-        public ReactiveObjectTests(ITestOutputHelper testOutputHelper) => _helper = testOutputHelper;
+        public ReactiveObjectTests(ITestOutputHelper testOutputHelper)
+        {
+            _helper = testOutputHelper;
+            ServiceLocator.Current().AddCoreRegistrations(() => new TestRegistrations());
+        }
 
         /// <summary>
         /// Test that changing values should always arrive before changed.
@@ -43,34 +48,34 @@ namespace ReactiveMarbles.Mvvm.Tests
 
             var beforeFired = false;
             fixture.Changing.Subscribe(
-                x =>
+                _ =>
                 {
                     // XXX: The content of these asserts don't actually get
                     // propagated back, it only prevents before_fired from
                     // being set - we have to enable 1st-chance exceptions
                     // to see the real error
-                    Assert.Equal("IsOnlyOneWord", x.PropertyName);
+                    Assert.Equal("IsOnlyOneWord", _.PropertyName);
                     Assert.Equal(fixture.IsOnlyOneWord, beforeSet);
                     beforeFired = true;
                 });
 
             var afterFired = false;
             fixture.Changed.Subscribe(
-                x =>
+                changedEventArgs =>
                 {
-                    Assert.Equal("IsOnlyOneWord", x.PropertyName);
+                    Assert.Equal("IsOnlyOneWord", changedEventArgs.PropertyName);
                     Assert.Equal(fixture.IsOnlyOneWord, afterSet);
                     afterFired = true;
                 });
 
             fixture.IsOnlyOneWord = afterSet;
 
-            Assert.True(beforeFired);
-            Assert.True(afterFired);
+            beforeFired.Should().BeTrue();
+            afterFired.Should().BeTrue();
         }
 
         /// <summary>
-        /// Test that deferring the notifications dont show up until undeferred.
+        /// Test that deferring the notifications dont show up until un-deferred.
         /// </summary>
         [Fact]
         public void DeferredNotificationsDontShowUpUntilUndeferred()
@@ -79,9 +84,9 @@ namespace ReactiveMarbles.Mvvm.Tests
             fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
             fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
             var propertyChangingEvents = new List<PropertyChangingEventArgs>();
-            fixture.PropertyChanging += (sender, args) => propertyChangingEvents.Add(args);
+            fixture.PropertyChanging += (_, args) => propertyChangingEvents.Add(args);
             var propertyChangedEvents = new List<PropertyChangedEventArgs>();
-            fixture.PropertyChanged += (sender, args) => propertyChangedEvents.Add(args);
+            fixture.PropertyChanged += (_, args) => propertyChangedEvents.Add(args);
 
             AssertCount(0, changing, changed, propertyChangingEvents, propertyChangedEvents);
             fixture.NullableInt = 4;
@@ -133,45 +138,39 @@ namespace ReactiveMarbles.Mvvm.Tests
         {
             var fixture = new TestFixture { IsOnlyOneWord = "Foo" };
 
-            fixture.Changed.Subscribe(x => { throw new Exception("Terminate!"); });
+            fixture.Changed.Subscribe(_ => throw new Exception("Terminate!"));
             fixture.ThrownExceptions.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var exceptionList)
                 .Subscribe();
 
             fixture.IsOnlyOneWord = "Bar";
-            Assert.Equal(1, exceptionList.Count);
+
+            exceptionList.Should().HaveCount(1);
         }
 
         /// <summary>
         /// Tests that ObservableForProperty using expression.
         /// </summary>
-        [Fact(Skip = "ObservableForProperty")]
+        [Fact]
         public void ObservableForPropertyUsingExpression()
         {
-            // var fixture = new TestFixture
-            // {
-            //     IsNotNullString = "Foo",
-            //     IsOnlyOneWord = "Baz"
-            // };
-            // var output = new List<IObservedChange<TestFixture, string?>>();
-            // fixture.ObservableForProperty(x => x.IsNotNullString)
-            //        .WhereNotNull()
-            //        .Subscribe(x => output.Add(x));
-            //
-            // fixture.IsNotNullString = "Bar";
-            // fixture.IsNotNullString = "Baz";
-            // fixture.IsNotNullString = "Baz";
-            //
-            // fixture.IsOnlyOneWord = "Bamf";
-            //
-            // Assert.Equal(2, output.Count);
-            //
-            // Assert.Equal(fixture, output[0].Sender);
-            // Assert.Equal("IsNotNullString", output[0].GetPropertyName());
-            // Assert.Equal("Bar", output[0].Value);
-            //
-            // Assert.Equal(fixture, output[1].Sender);
-            // Assert.Equal("IsNotNullString", output[1].GetPropertyName());
-            // Assert.Equal("Baz", output[1].Value);
+            var fixture = new TestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
+            var output = new List<IObservedChange<TestFixture, string?>>();
+            fixture.ObservableForProperty(x => x.IsNotNullString)
+                .Subscribe(x => output.Add(x));
+
+            fixture.IsNotNullString = "Bar";
+            fixture.IsNotNullString = "Baz";
+            fixture.IsNotNullString = "Baz";
+
+            fixture.IsOnlyOneWord = "Bamf";
+
+            output.Should().HaveCount(2);
+            output[0].Sender.Should().Be(fixture);
+            output[0].GetPropertyName().Should().Be("IsNotNullString");
+            output[0].Value.Should().Be("Bar");
+            output[1].Sender.Should().Be(fixture);
+            output[1].GetPropertyName().Should().Be("IsNotNullString");
+            output[1].Value.Should().Be("Baz");
         }
 
         /// <summary>
@@ -190,9 +189,9 @@ namespace ReactiveMarbles.Mvvm.Tests
             fixture.UsesExprRaiseSet = "Foo";
             fixture.UsesExprRaiseSet = "Foo"; // This one shouldn't raise a change notification
 
-            Assert.Equal("Foo", fixture.UsesExprRaiseSet);
-            Assert.Equal(1, output.Count);
-            Assert.Equal("UsesExprRaiseSet", output[0]);
+            fixture.UsesExprRaiseSet.Should().Be("Foo");
+            output.Should().HaveCount(1);
+            output.Should().ContainSingle(x => x == "UsesExprRaiseSet");
         }
 
         /// <summary>
@@ -234,6 +233,7 @@ namespace ReactiveMarbles.Mvvm.Tests
                 .Where(x => x.PropertyName is not null)
                 .Select(x => x.PropertyName!)
                 .Subscribe(x => outputChanging.Add(x));
+
             fixture.Changed
                 .Where(x => x.PropertyName is not null)
                 .Select(x => x.PropertyName!)
@@ -247,26 +247,29 @@ namespace ReactiveMarbles.Mvvm.Tests
 
             var results = new[] { "IsNotNullString", "IsOnlyOneWord", "IsOnlyOneWord", "IsNotNullString" };
 
-            Assert.Equal(results.Length, output.Count);
-
             output.Should().BeEquivalentTo(outputChanging);
+            results.Length.Should().Be(output.Count);
             results.Should().BeEquivalentTo(output);
         }
 
         /// <summary>
         /// Tests to make sure that ReactiveObject doesn't rethrow exceptions.
         /// </summary>
-        [Fact(Skip = "WhenAnyValue")]
+        [Fact]
         public void ReactiveObjectShouldRethrowException()
         {
-            // var fixture = new TestFixture();
-            // var observable = fixture.WhenAnyValue(x => x.IsOnlyOneWord).Skip(1);
-            // observable.Subscribe(x => throw new Exception("This is a test."));
-            //
-            // var result = Record.Exception(() => fixture.IsOnlyOneWord = "Two Words");
-            //
-            // Assert.IsType<Exception>(result);
-            // Assert.Equal("This is a test.", result.Message);
+            var fixture = new TestFixture();
+            var observable = fixture.WhenAnyValue(x => x.IsOnlyOneWord).Skip(1);
+            observable.Subscribe(_ => throw new Exception("This is a test."));
+
+            var result = Record.Exception(() => fixture.IsOnlyOneWord = "Two Words");
+
+            result.Should()
+                .BeOfType<Exception>()
+                .Which
+                .Message
+                .Should()
+                .Be("This is a test.");
         }
 
         private static void AssertCount(int expected, params ICollection[] collections)

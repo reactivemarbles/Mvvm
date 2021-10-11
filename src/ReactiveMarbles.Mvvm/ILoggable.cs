@@ -9,5 +9,6 @@ namespace ReactiveMarbles.Mvvm
     /// </summary>
     public interface ILoggable
     {
+        // TODO: [rlittlesii: October 11, 2021] US MS Logging to log MVVM internals.
     }
 }

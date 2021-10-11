@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using DynamicData;
+using ReactiveMarbles.Locator;
 
 namespace ReactiveMarbles.Mvvm
 {
@@ -23,9 +25,9 @@ namespace ReactiveMarbles.Mvvm
     /// </summary>
     public class RxObject : IRxObject
     {
-        // todo: <Rodney Littles II: August 29, 2021> Figure out how to get the locator involved.
-        // private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(() => new ScheduledSubject<Exception>(Scheduler.Immediate, ICoreRegistration.ExceptionHandler));
-        private readonly Lazy<Subject<Exception>> _thrownExceptions = new(() => new Subject<Exception>(), LazyThreadSafetyMode.PublicationOnly);
+        private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(() =>
+            new ScheduledSubject<Exception>(Scheduler.Immediate, ServiceLocator.Current().GetService<ICoreRegistration>().ExceptionHandler), LazyThreadSafetyMode.PublicationOnly);
+
         private readonly Lazy<Notifications> _notification = new(() => new Notifications());
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace ReactiveMarbles.Mvvm
         public event PropertyChangingEventHandler? PropertyChanging;
 
         /// <inheritdoc/>
-        public IObservable<Exception> ThrownExceptions => _thrownExceptions.Value;
+        public IObservable<Exception> ThrownExceptions => _thrownExceptions.Value.AsObservable();
 
         /// <inheritdoc/>
         public IObservable<RxPropertyChangingEventArgs<IRxObject>> Changing { get; }
@@ -128,10 +130,12 @@ namespace ReactiveMarbles.Mvvm
             }
             catch (Exception e)
             {
-                if (_thrownExceptions.IsValueCreated)
+                if (!_thrownExceptions.IsValueCreated)
                 {
-                    _thrownExceptions.Value.OnNext(e);
+                    throw;
                 }
+
+                _thrownExceptions.Value.OnNext(e);
             }
         }
 
@@ -158,10 +162,12 @@ namespace ReactiveMarbles.Mvvm
             }
             catch (Exception e)
             {
-                if (_thrownExceptions.IsValueCreated)
+                if (!_thrownExceptions.IsValueCreated)
                 {
-                    _thrownExceptions.Value.OnNext(e);
+                    throw;
                 }
+
+                _thrownExceptions.Value.OnNext(e);
             }
         }
 

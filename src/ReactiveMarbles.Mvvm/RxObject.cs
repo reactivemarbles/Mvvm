@@ -37,8 +37,8 @@ namespace ReactiveMarbles.Mvvm
         {
             Changed = Observable.Create<RxPropertyChangedEventArgs<IRxObject>>(observer =>
             {
-                void Handler(object sender, PropertyChangedEventArgs args) =>
-                    observer.OnNext(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, (IRxObject)sender));
+                void Handler(object? sender, PropertyChangedEventArgs args) =>
+                    observer.OnNext(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException()));
 
                 PropertyChanged += Handler;
                 return Disposable.Create(() => PropertyChanged -= Handler);
@@ -46,8 +46,8 @@ namespace ReactiveMarbles.Mvvm
 
             Changing = Observable.Create<RxPropertyChangingEventArgs<IRxObject>>(observer =>
             {
-                void Handler(object sender, PropertyChangingEventArgs args) =>
-                    observer.OnNext(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, (IRxObject)sender));
+                void Handler(object? sender, PropertyChangingEventArgs args) =>
+                    observer.OnNext(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException()));
 
                 PropertyChanging += Handler;
                 return Disposable.Create(() => PropertyChanging -= Handler);
@@ -246,8 +246,8 @@ namespace ReactiveMarbles.Mvvm
         {
             public readonly SourceList<RxPropertyChangedEventArgs<IRxObject>> PropertyChangedEvents = new();
             public readonly SourceList<RxPropertyChangingEventArgs<IRxObject>> PropertyChangingEvents = new();
-            public long ChangeNotificationsDelayed = 0;
-            public long ChangeNotificationsSuppressed = 0;
+            public long ChangeNotificationsDelayed;
+            public long ChangeNotificationsSuppressed;
         }
     }
 }

@@ -11,10 +11,10 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DynamicData;
 using FluentAssertions;
+using Microsoft.Reactive.Testing;
 using ReactiveMarbles.Locator;
 using ReactiveUI;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ReactiveMarbles.Mvvm.Tests
 {
@@ -23,17 +23,16 @@ namespace ReactiveMarbles.Mvvm.Tests
     /// </summary>
     public class ReactiveObjectTests
     {
-        private readonly ITestOutputHelper _helper;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ReactiveObjectTests"/> class.
         /// </summary>
-        /// <param name="testOutputHelper">The helper.</param>
-        public ReactiveObjectTests(ITestOutputHelper testOutputHelper)
-        {
-            _helper = testOutputHelper;
-            ServiceLocator.Current().AddCoreRegistrations(() => new TestRegistrations());
-        }
+        public ReactiveObjectTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
+            CoreRegistrationBuilder
+                .Create()
+                .WithMainThreadScheduler(new TestScheduler())
+                .WithTaskPoolScheduler(new TestScheduler())
+                .WithExceptionHandler(new DebugExceptionHandler())
+                .Build());
 
         /// <summary>
         /// Test that changing values should always arrive before changed.
@@ -61,9 +60,9 @@ namespace ReactiveMarbles.Mvvm.Tests
 
             var afterFired = false;
             fixture.Changed.Subscribe(
-                changedEventArgs =>
+                _ =>
                 {
-                    Assert.Equal("IsOnlyOneWord", changedEventArgs.PropertyName);
+                    Assert.Equal("IsOnlyOneWord", _.PropertyName);
                     Assert.Equal(fixture.IsOnlyOneWord, afterSet);
                     afterFired = true;
                 });
@@ -182,8 +181,7 @@ namespace ReactiveMarbles.Mvvm.Tests
             var fixture = new TestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
             var output = new List<string>();
             fixture.Changed
-                .Where(x => x.PropertyName is not null)
-                .Select(x => x.PropertyName!)
+                .Select(x => x.PropertyName)
                 .Subscribe(x => output.Add(x));
 
             fixture.UsesExprRaiseSet = "Foo";
@@ -230,13 +228,11 @@ namespace ReactiveMarbles.Mvvm.Tests
             var fixture = new TestFixture();
 
             fixture.Changing
-                .Where(x => x.PropertyName is not null)
-                .Select(x => x.PropertyName!)
+                .Select(x => x.PropertyName)
                 .Subscribe(x => outputChanging.Add(x));
 
             fixture.Changed
-                .Where(x => x.PropertyName is not null)
-                .Select(x => x.PropertyName!)
+                .Select(x => x.PropertyName)
                 .Subscribe(x => output.Add(x));
 
             fixture.IsNotNullString = "Foo Bar Baz";

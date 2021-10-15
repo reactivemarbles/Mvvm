@@ -21,6 +21,7 @@ namespace ReactiveMarbles.Mvvm
     /// </summary>
     public record RxRecord : IRxObject
     {
+        private const string InvalidOperationMessage = "Cannot cast Sender to an IRxObject";
         private readonly Lazy<Subject<Exception>> _thrownExceptions = new(() => new Subject<Exception>(), LazyThreadSafetyMode.PublicationOnly);
         private readonly Lazy<Subject<Unit>> _startOrStopDelayingChangeNotifications = new(() => new Subject<Unit>(), LazyThreadSafetyMode.PublicationOnly);
         private long _changeNotificationsDelayed;
@@ -34,7 +35,7 @@ namespace ReactiveMarbles.Mvvm
             Changed = Observable.Create<RxPropertyChangedEventArgs<IRxObject>>(observer =>
             {
                 void Handler(object? sender, PropertyChangedEventArgs args) =>
-                    observer.OnNext(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException()));
+                    observer.OnNext(new RxPropertyChangedEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException(InvalidOperationMessage)));
 
                 PropertyChanged += Handler;
                 return Disposable.Create(() => PropertyChanged -= Handler);
@@ -43,7 +44,7 @@ namespace ReactiveMarbles.Mvvm
             Changing = Observable.Create<RxPropertyChangingEventArgs<IRxObject>>(observer =>
             {
                 void Handler(object? sender, PropertyChangingEventArgs args) =>
-                    observer.OnNext(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException()));
+                    observer.OnNext(new RxPropertyChangingEventArgs<IRxObject>(args.PropertyName, sender as IRxObject ?? throw new InvalidOperationException(InvalidOperationMessage)));
 
                 PropertyChanging += Handler;
                 return Disposable.Create(() => PropertyChanging -= Handler);

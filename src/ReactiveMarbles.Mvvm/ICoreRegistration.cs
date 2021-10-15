@@ -20,7 +20,7 @@ namespace ReactiveMarbles.Mvvm
         /// <summary>
         /// Gets the task pool scheduler.
         /// </summary>
-        IScheduler TaskpoolScheduler { get; }
+        IScheduler TaskPoolScheduler { get; }
 
         /// <summary>
         /// Gets the default exception handler.

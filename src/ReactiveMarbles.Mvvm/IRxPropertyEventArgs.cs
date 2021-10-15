@@ -13,7 +13,7 @@ namespace ReactiveMarbles.Mvvm
         /// <summary>
         /// Gets the property name that changed.
         /// </summary>
-        string PropertyName { get; }
+        string? PropertyName { get; }
 
         /// <summary>
         /// Gets the sender that changed.

@@ -17,7 +17,8 @@ namespace ReactiveMarbles.Mvvm.Benchmarks.Memory
         [BenchmarkCategory("Memory")]
         public void ReactiveObjectCreation()
         {
-            var thing = Enumerable.Range(0, CreateNumber)
+            var thing =
+                Enumerable.Range(0, CreateNumber)
                 .Select(x => new DummyReactiveObject())
                 .ToList();
         }

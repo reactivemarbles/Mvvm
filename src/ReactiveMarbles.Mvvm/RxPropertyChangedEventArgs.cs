@@ -13,6 +13,7 @@ namespace ReactiveMarbles.Mvvm
     /// and Changed Observables.
     /// </summary>
     /// <param name="PropertyName">The property name.</param>
+    /// <param name="Sender">The sender.</param>
     /// <typeparam name="TSender">The sender type.</typeparam>
-    public record RxPropertyChangedEventArgs<TSender>(string PropertyName, TSender Sender) : IRxPropertyEventArgs<TSender>;
+    public record RxPropertyChangedEventArgs<TSender>(string? PropertyName, TSender Sender) : IRxPropertyEventArgs<TSender>;
 }

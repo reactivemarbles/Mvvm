@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-        <PackageReference Include="ReactiveUI" Version="11.*" />
+        <PackageReference Include="ReactiveUI" Version="16.*" />
     </ItemGroup>
 
     <ItemGroup>

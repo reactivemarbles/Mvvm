@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DynamicData" Version="7.4.9" />
-      <PackageReference Include="ReactiveMarbles.Locator" Version="1.1.4" />
-      <PackageReference Include="System.Reactive" Version="5.0.0" />
+      <PackageReference Include="DynamicData" />
+      <PackageReference Include="ReactiveMarbles.Locator" />
+      <PackageReference Include="System.Reactive" />
     </ItemGroup>
 
 </Project>

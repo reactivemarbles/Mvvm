@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageVersion Include="Nuke.Common" Version="6.0.1" />
-    <PackageVersion Include="NuGet.CommandLine" Version="5.8.1" />
-    <PackageVersion Include="JetBrains.ReSharper.GlobalTools" Version="2020.3.2" />
-    <PackageVersion Include="Rocket.Surgery.Nuke" Version="0.17.7" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.4.231" />
   </ItemGroup>

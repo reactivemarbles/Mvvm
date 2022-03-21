@@ -38,16 +38,7 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('tizen'))">
     <DefineConstants>$(DefineConstants);TIZEN</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference
-            Include="Microsoft.NETFramework.ReferenceAssemblies"
-            IncludeAssets="analyzers;build;buildMultitargeting;buildTransitive"
-            PrivateAssets="All"
-        />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" IncludeAssets="analyzers;build;buildMultitargeting;buildTransitive" PrivateAssets="All" />
-  </ItemGroup>
   <Target Name="ValidateNugetProperties" Condition="!$(IsTestProject) or $(IsTestProject) == ''" BeforeTargets="Compile">
       <Error Condition="$(PackageDescription) == '' or $(PackageDescription) == $(DefaultPackageDescription)" Text="The Nuget PackageDescription property needs to be set for the project. Currently : '$(PackageDescription)'" />
   </Target>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('directory.build.targets', '$(MSBuildThisFileDirectory)../'))" />
 </Project>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.4.231" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.354" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="3.2.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageVersion Include="ReactiveUI" Version="11.5.35" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="DynamicData" Version="7.4.9" />
+    <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.4" />
+    <PackageVersion Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="3.1.2" />
+    <PackageVersion Include="coverlet.msbuild" Version="3.1.2" />
+    <PackageVersion Include="FluentAssertions" Version="6.5.1" />
+    <PackageVersion Include="FluentAssertions.Analyzers" Version="0.16.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageVersion Include="Microsoft.Reactive.Testing" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="xunit" Version="2.4.1" />
+    <PackageVersion Include="xunit.analyzers" Version="0.10.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageVersion Include="coverlet.collector" Version="3.1.0" />
+  </ItemGroup>
+  <Import
+        Project="$(MSBuildThisFileDirectory)/directory.packages.support.props"
+        Condition="Exists('$(MSBuildThisFileDirectory)/directory.packages.support.props')"
+    />
+</Project>

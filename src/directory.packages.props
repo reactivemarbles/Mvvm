@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageVersion Include="DynamicData" Version="7.4.9" />
     <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.4" />
+    <PackageVersion Include="ReactiveMarbles.PropertyChanged" Version="2.0.27" />
     <PackageVersion Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 

@@ -21,12 +21,12 @@ namespace ReactiveMarbles.Mvvm.Tests
     /// <summary>
     /// Tests for the <see cref="ReactiveObject"/>.
     /// </summary>
-    public class ReactiveObjectTests
+    public class RxObjectTests
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ReactiveObjectTests"/> class.
+        /// Initializes a new instance of the <see cref="RxObjectTests"/> class.
         /// </summary>
-        public ReactiveObjectTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
+        public RxObjectTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
             CoreRegistrationBuilder
                 .Create()
                 .WithMainThreadScheduler(new TestScheduler())
@@ -218,10 +218,10 @@ namespace ReactiveMarbles.Mvvm.Tests
         }
 
         /// <summary>
-        /// Performs a ReactiveObject smoke test.
+        /// Performs a RxObject smoke test.
         /// </summary>
         [Fact]
-        public void ReactiveObjectSmokeTest()
+        public void RxObjectSmokeTest()
         {
             var outputChanging = new List<string>();
             var output = new List<string>();

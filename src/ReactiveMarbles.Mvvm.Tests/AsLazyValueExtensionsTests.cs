@@ -12,7 +12,7 @@ namespace ReactiveMarbles.Mvvm.Tests;
 /// <summary>
 /// Tests for the <see cref="AsValueExtensions"/>.
 /// </summary>
-public class AsValueExtensionsTests
+public class AsLazyValueExtensionsTests
 {
     /// <summary>
     /// Tests the default value.
@@ -99,7 +99,7 @@ public class AsValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsValue(onChanged: _ => { });
+                .AsLazyValue(onChanged: _ => { });
 
         // When
         testObject.FirstName = first;
@@ -123,7 +123,7 @@ public class AsValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsValue(onChanged: _ => { }, initialValue: () => string.Empty);
+                .AsLazyValue(onChanged: _ => { }, initialValue: () => string.Empty);
 
         // When
         testObject.FirstName = first;
@@ -147,7 +147,7 @@ public class AsValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsValue(onChanging: _ => { }, onChanged: _ => { }, initialValue: () => string.Empty);
+                .AsLazyValue(onChanging: _ => { }, onChanged: _ => { }, initialValue: () => string.Empty);
 
         // When
         testObject.FirstName = first;
@@ -172,7 +172,7 @@ public class AsValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsValue(onChanged: _ => { }, scheduler, initialValue: () => string.Empty);
+                .AsLazyValue(onChanged: _ => { }, scheduler, initialValue: () => string.Empty);
 
         // When
         testObject.FirstName = first;
@@ -198,7 +198,7 @@ public class AsValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsValue(_ => { }, _ => { }, scheduler, () => string.Empty);
+                .AsLazyValue(_ => { }, _ => { }, scheduler, () => string.Empty);
 
         // When
         testObject.FirstName = first;

@@ -21,7 +21,7 @@ public class AsLazyValueExtensionsTests
     public void GivenNoChanges_WhenAsValue_ThenFullNameIsEmpty()
     {
         // Given, When
-        var sut = new AsValueTestObject();
+        var sut = new AsLazyValueTestObject();
 
         // Then
         sut.FullName.Should().BeNullOrEmpty();
@@ -37,7 +37,7 @@ public class AsLazyValueExtensionsTests
     public void GivenSequence_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
+        var sut = new AsLazyValueTestObject();
 
         // When
         sut.FirstName = first;
@@ -57,7 +57,7 @@ public class AsLazyValueExtensionsTests
     public void GivenFirstName_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
+        var sut = new AsLazyValueTestObject();
 
         // When
         sut.FirstName = first;
@@ -76,7 +76,7 @@ public class AsLazyValueExtensionsTests
     public void GivenLastName_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
+        var sut = new AsLazyValueTestObject();
 
         // When
         sut.LastName = last;
@@ -95,7 +95,7 @@ public class AsLazyValueExtensionsTests
     public void GivenOnChanged_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -119,7 +119,7 @@ public class AsLazyValueExtensionsTests
     public void GivenOnChangedAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -143,7 +143,7 @@ public class AsLazyValueExtensionsTests
     public void GivenOnChangedAndOnChangingAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -168,7 +168,7 @@ public class AsLazyValueExtensionsTests
     {
         // Given
         var scheduler = new TestScheduler();
-        var testObject = new AsValueTestObject();
+        var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -194,7 +194,7 @@ public class AsLazyValueExtensionsTests
     {
         // Given
         var scheduler = new TestScheduler();
-        var testObject = new AsValueTestObject();
+        var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)

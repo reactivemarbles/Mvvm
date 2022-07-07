@@ -2,6 +2,8 @@
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using ReactiveMarbles.PropertyChanged;
@@ -167,17 +169,15 @@ public class AsLazyValueExtensionsTests
     public void GivenOnChangedAndOnChangingAndSchedulerAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var scheduler = new TestScheduler();
         var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsLazyValue(onChanged: _ => { }, scheduler, initialValue: () => string.Empty);
+                .AsLazyValue(onChanged: _ => { }, Scheduler.Immediate, initialValue: () => string.Empty);
 
         // When
         testObject.FirstName = first;
         testObject.LastName = last;
-        scheduler.Start();
 
         // Then
         sut.Value.Should().Be(first + last);
@@ -193,17 +193,15 @@ public class AsLazyValueExtensionsTests
     public void GivenAllParameters_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var scheduler = new TestScheduler();
         var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsLazyValue(_ => { }, _ => { }, scheduler, () => string.Empty);
+                .AsLazyValue(_ => { }, _ => { }, Scheduler.Immediate, () => string.Empty);
 
         // When
         testObject.FirstName = first;
         testObject.LastName = last;
-        scheduler.Start();
 
         // Then
         sut.Value.Should().Be(first + last);

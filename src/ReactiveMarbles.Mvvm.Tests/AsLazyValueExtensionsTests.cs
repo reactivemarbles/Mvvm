@@ -175,7 +175,7 @@ public class AsLazyValueExtensionsTests
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsLazyValue(onChanged: _ => { }, testSch
+                .AsLazyValue(onChanged: _ => { }, testScheduler, () => start);
 
         sut.Value.Should().Be(start);
 

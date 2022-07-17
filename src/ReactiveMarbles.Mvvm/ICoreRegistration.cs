@@ -5,26 +5,25 @@
 using System;
 using System.Reactive.Concurrency;
 
-namespace ReactiveMarbles.Mvvm
+namespace ReactiveMarbles.Mvvm;
+
+/// <summary>
+/// Interface that represents core Reactive Marbles registration.
+/// </summary>
+public interface ICoreRegistration
 {
     /// <summary>
-    /// Interface that represents core Reactive Marbles registration.
+    /// Gets the main thread scheduler.
     /// </summary>
-    public interface ICoreRegistration
-    {
-        /// <summary>
-        /// Gets the main thread scheduler.
-        /// </summary>
-        IScheduler MainThreadScheduler { get; }
+    IScheduler MainThreadScheduler { get; }
 
-        /// <summary>
-        /// Gets the task pool scheduler.
-        /// </summary>
-        IScheduler TaskPoolScheduler { get; }
+    /// <summary>
+    /// Gets the task pool scheduler.
+    /// </summary>
+    IScheduler TaskPoolScheduler { get; }
 
-        /// <summary>
-        /// Gets the default exception handler.
-        /// </summary>
-        IObserver<Exception> ExceptionHandler { get; }
-    }
+    /// <summary>
+    /// Gets the default exception handler.
+    /// </summary>
+    IObserver<Exception> ExceptionHandler { get; }
 }

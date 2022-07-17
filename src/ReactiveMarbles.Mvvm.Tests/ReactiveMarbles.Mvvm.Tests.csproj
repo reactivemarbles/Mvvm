@@ -23,6 +23,10 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="ReactiveMarbles.PropertyChanged" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj" />

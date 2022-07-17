@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using DynamicData.Binding;
+using ReactiveMarbles.PropertyChanged;
 
 namespace ReactiveMarbles.Mvvm.Benchmarks.Memory
 {
@@ -27,10 +29,20 @@ namespace ReactiveMarbles.Mvvm.Benchmarks.Memory
         [IgnoreDataMember]
         private string? _usesExprRaiseSet;
 
+        private ValueBinder<string> _observableProperty;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TestFixture"/> class.
         /// </summary>
-        public DummyRxObject() => TestCollection = new ObservableCollectionExtended<int>();
+        public DummyRxObject()
+        {
+            TestCollection = new ObservableCollectionExtended<int>();
+
+            _observableProperty =
+                this.WhenChanged(x => x.IsOnlyOneWord)
+                    .Select(x => x + "Changed")
+                    .AsValue(onChanged: x => RaisePropertyChanged(nameof(ObservableProperty)));
+        }
 
         /// <summary>
         /// Gets or sets the is not null string.
@@ -106,5 +118,10 @@ namespace ReactiveMarbles.Mvvm.Benchmarks.Memory
             get => _usesExprRaiseSet;
             set => RaiseAndSetIfChanged(ref _usesExprRaiseSet, value);
         }
+
+        /// <summary>
+        /// Gets the observable property.
+        /// </summary>
+        public string ObservableProperty => _observableProperty.Value;
     }
 }

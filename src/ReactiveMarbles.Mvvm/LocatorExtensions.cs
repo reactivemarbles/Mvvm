@@ -7,38 +7,37 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using ReactiveMarbles.Locator;
 
-namespace ReactiveMarbles.Mvvm
+namespace ReactiveMarbles.Mvvm;
+
+/// <summary>
+/// <see cref="IServiceLocator"/> extensions.
+/// </summary>
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1625:ElementDocumentationMustNotBeCopiedAndPasted", Justification = "Builder Extensions.")]
+public static class LocatorExtensions
 {
     /// <summary>
-    /// <see cref="IServiceLocator"/> extensions.
+    /// Adds core registrations to the locator.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1625:ElementDocumentationMustNotBeCopiedAndPasted", Justification = "Builder Extensions.")]
-    public static class LocatorExtensions
+    /// <param name="serviceLocator">The service locator.</param>
+    /// <param name="mainThreadScheduler">The main thread scheduler.</param>
+    /// <param name="taskPoolScheduler">The task pool scheduler.</param>
+    /// <param name="exceptionHandler">The exception handler.</param>
+    /// <returns>The service locator.</returns>
+    public static IServiceLocator AddCoreRegistrations(this IServiceLocator serviceLocator, IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
     {
-        /// <summary>
-        /// Adds core registrations to the locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="mainThreadScheduler">The main thread scheduler.</param>
-        /// <param name="taskPoolScheduler">The task pool scheduler.</param>
-        /// <param name="exceptionHandler">The exception handler.</param>
-        /// <returns>The service locator.</returns>
-        public static IServiceLocator AddCoreRegistrations(this IServiceLocator serviceLocator, IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
-        {
-            serviceLocator.AddService(() => new CoreRegistration(mainThreadScheduler, taskPoolScheduler, exceptionHandler));
-            return serviceLocator;
-        }
+        serviceLocator.AddService(() => new CoreRegistration(mainThreadScheduler, taskPoolScheduler, exceptionHandler));
+        return serviceLocator;
+    }
 
-        /// <summary>
-        /// Adds core registrations to the locator.
-        /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        /// <param name="coreRegistration">The core registration.</param>
-        /// <returns>The service locator.</returns>
-        public static IServiceLocator AddCoreRegistrations(this IServiceLocator serviceLocator, Func<ICoreRegistration> coreRegistration)
-        {
-            serviceLocator.AddService(coreRegistration);
-            return serviceLocator;
-        }
+    /// <summary>
+    /// Adds core registrations to the locator.
+    /// </summary>
+    /// <param name="serviceLocator">The service locator.</param>
+    /// <param name="coreRegistration">The core registration.</param>
+    /// <returns>The service locator.</returns>
+    public static IServiceLocator AddCoreRegistrations(this IServiceLocator serviceLocator, Func<ICoreRegistration> coreRegistration)
+    {
+        serviceLocator.AddService(coreRegistration);
+        return serviceLocator;
     }
 }

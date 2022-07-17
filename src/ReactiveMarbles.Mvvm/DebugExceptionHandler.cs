@@ -5,39 +5,38 @@
 using System;
 using System.Diagnostics;
 
-namespace ReactiveMarbles.Mvvm
+namespace ReactiveMarbles.Mvvm;
+
+/// <summary>
+/// Debug exception handler.
+/// This is the default exception handler.
+/// </summary>
+public class DebugExceptionHandler : IObserver<Exception>
 {
-    /// <summary>
-    /// Debug exception handler.
-    /// This is the default exception handler.
-    /// </summary>
-    public class DebugExceptionHandler : IObserver<Exception>
+    /// <inheritdoc />
+    public void OnCompleted()
     {
-        /// <inheritdoc />
-        public void OnCompleted()
+        if (Debugger.IsAttached)
         {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+            Debugger.Break();
         }
+    }
 
-        /// <inheritdoc />
-        public void OnError(Exception error)
+    /// <inheritdoc />
+    public void OnError(Exception error)
+    {
+        if (Debugger.IsAttached)
         {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+            Debugger.Break();
         }
+    }
 
-        /// <inheritdoc />
-        public void OnNext(Exception value)
+    /// <inheritdoc />
+    public void OnNext(Exception value)
+    {
+        if (Debugger.IsAttached)
         {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+            Debugger.Break();
         }
     }
 }

@@ -20,3 +20,17 @@
 | ReactiveObjectWithChange |          100 |    132,292.6 ns |   2,553.90 ns |   3,580.21 ns |  24.1699 |   1.9531 |   0.7324 |   203,267 B |
 |   ReactiveObjectCreation |         4000 |  1,530,059.8 ns |  26,466.29 ns |  24,756.59 ns | 359.3750 | 179.6875 |        - | 3,008,145 B |
 | ReactiveObjectWithChange |         4000 | 11,304,993.4 ns | 146,890.54 ns | 137,401.50 ns | 953.1250 | 468.7500 | 218.7500 | 8,091,139 B |
+
+## AsValue
+
+|                             Method |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 |  Gen 1 | Allocated |
+|----------------------------------- |----------:|---------:|---------:|------:|--------:|-------:|-------:|----------:|
+|                   AsValueBenchmark |  48.78 μs | 0.257 μs | 0.241 μs |  1.00 |    0.00 | 1.8311 | 0.3662 |     15 KB |
+|    AsValueWhenWordChangedBenchmark |  20.54 μs | 0.096 μs | 0.090 μs |  0.42 |    0.00 | 0.7935 | 0.1221 |      7 KB |
+
+
+## ReactiveUI ToProperty
+|                             Method |      Mean |    Error |   StdDev | Ratio | RatioSD |  Gen 0 |  Gen 1 | Allocated |
+|----------------------------------- |----------:|---------:|---------:|------:|--------:|-------:|-------:|----------:|
+|                ToPropertyBenchmark | 105.46 μs | 0.971 μs | 0.860 μs |  2.16 |    0.02 | 2.9297 | 0.4883 |     25 KB |
+| ToPropertyWhenWordChangedBenchmark |  54.09 μs | 1.078 μs | 1.580 μs |  1.12 |    0.03 | 1.5869 | 0.2441 |     13 KB |

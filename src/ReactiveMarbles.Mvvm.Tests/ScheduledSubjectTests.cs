@@ -24,7 +24,7 @@ public class ScheduledSubjectTests
         // Given
         Unit? result = null;
         var scheduler = new TestScheduler();
-        var sut = new ScheduledSubject<Unit>(scheduler);
+        var sut = new ProxyScheduledSubject<Unit>(scheduler);
         sut.Subscribe(actual => result = actual);
 
         // When

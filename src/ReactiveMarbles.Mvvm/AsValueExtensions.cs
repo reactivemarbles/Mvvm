@@ -20,7 +20,7 @@ public static class AsValueExtensions
     /// <typeparam name="T">The property type.</typeparam>
     /// <returns>A binder.</returns>
     public static ValueBinder<T?> AsValue<T>(this IObservable<T?> source, Action<T?> onChanged) =>
-        new(source, onChanged, initialValue: () => default(T));
+        new(source, onChanged, initialValue: () => default);
 
     /// <summary>
     /// Projects an observable value to a property for binding.

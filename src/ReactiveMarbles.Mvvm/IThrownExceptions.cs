@@ -4,28 +4,27 @@
 
 using System;
 
-namespace ReactiveMarbles.Mvvm
+namespace ReactiveMarbles.Mvvm;
+
+/// <summary>
+/// <para>
+/// This interface is implemented by Rx objects which are given
+/// IObservables as input - when the input IObservables OnError, instead of
+/// disabling the Rx object, we catch the IObservable and pipe it into
+/// this property.
+/// </para>
+/// <para>
+/// Normally this IObservable is implemented with a ScheduledSubject whose
+/// default Observer is CoreRegistration.DefaultExceptionHandler - this means, that if
+/// you aren't listening to ThrownExceptions and one appears, the exception
+/// will appear on the UI thread and crash the application.
+/// </para>
+/// </summary>
+public interface IThrownExceptions
 {
     /// <summary>
-    /// <para>
-    /// This interface is implemented by RxUI objects which are given
-    /// IObservables as input - when the input IObservables OnError, instead of
-    /// disabling the RxUI object, we catch the IObservable and pipe it into
-    /// this property.
-    /// </para>
-    /// <para>
-    /// Normally this IObservable is implemented with a ScheduledSubject whose
-    /// default Observer is RxApp.DefaultExceptionHandler - this means, that if
-    /// you aren't listening to ThrownExceptions and one appears, the exception
-    /// will appear on the UI thread and crash the application.
-    /// </para>
+    /// Gets a observable which will fire whenever an exception would normally terminate.
+    /// internal state.
     /// </summary>
-    public interface IThrownExceptions
-    {
-        /// <summary>
-        /// Gets a observable which will fire whenever an exception would normally terminate.
-        /// internal state.
-        /// </summary>
-        IObservable<Exception> ThrownExceptions { get; }
-    }
+    IObservable<Exception> ThrownExceptions { get; }
 }

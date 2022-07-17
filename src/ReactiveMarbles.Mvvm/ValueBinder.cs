@@ -34,7 +34,7 @@ public sealed class ValueBinder<T> : IDisposable
         IScheduler? scheduler,
         Func<T> initialValue)
     {
-        var subject = new ScheduledSubject<T>(scheduler ?? CurrentThreadScheduler.Instance);
+        var subject = new ProxyScheduledSubject<T>(scheduler ?? CurrentThreadScheduler.Instance);
         Value = initialValue.Invoke();
         subject
             .Subscribe(value =>
@@ -42,8 +42,8 @@ public sealed class ValueBinder<T> : IDisposable
                 onChanging?.Invoke(value);
                 Value = value;
                 onChanged.Invoke(value);
-            });
-        source.DistinctUntilChanged().StartWith(Value).Subscribe(subject);
+            }).DisposeWith(_disposable);
+        source.DistinctUntilChanged().StartWith(Value).Subscribe(subject).DisposeWith(_disposable);
     }
 
     /// <summary>

@@ -169,15 +169,20 @@ public class AsLazyValueExtensionsTests
     public void GivenOnChangedAndOnChangingAndSchedulerAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
+        const string start = "start";
+        var testScheduler = new TestScheduler();
         var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsLazyValue(onChanged: _ => { }, Scheduler.Immediate, initialValue: () => string.Empty);
+                .AsLazyValue(onChanged: _ => { }, testSch
+
+        sut.Value.Should().Be(start);
 
         // When
         testObject.FirstName = first;
         testObject.LastName = last;
+        testScheduler.Start();
 
         // Then
         sut.Value.Should().Be(first + last);
@@ -193,15 +198,20 @@ public class AsLazyValueExtensionsTests
     public void GivenAllParameters_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
+        const string start = "start";
+        var testScheduler = new TestScheduler();
         var testObject = new AsLazyValueTestObject();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
-                .AsLazyValue(_ => { }, _ => { }, Scheduler.Immediate, () => string.Empty);
+                .AsLazyValue(_ => { }, _ => { }, testScheduler, () => start);
+
+        sut.Value.Should().Be(start);
 
         // When
         testObject.FirstName = first;
         testObject.LastName = last;
+        testScheduler.Start();
 
         // Then
         sut.Value.Should().Be(first + last);

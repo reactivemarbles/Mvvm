@@ -39,7 +39,7 @@ public sealed class LazyValueBinder<T> : IDisposable
         Func<T> initialValue)
     {
         _initialValue = initialValue;
-        var subject = new ScheduledSubject<T>(scheduler ?? CurrentThreadScheduler.Instance);
+        var subject = new ProxyScheduledSubject<T>(scheduler ?? CurrentThreadScheduler.Instance);
         _lazy = () =>
         {
             _value = _initialValue.Invoke();
@@ -49,8 +49,8 @@ public sealed class LazyValueBinder<T> : IDisposable
                     onChanging?.Invoke(value);
                     _value = value;
                     onChanged.Invoke(value);
-                });
-            source.DistinctUntilChanged().StartWith(_value).Subscribe(subject);
+                }).DisposeWith(_disposable);
+            source.DistinctUntilChanged().StartWith(_value).Subscribe(subject).DisposeWith(_disposable);
         };
     }
 

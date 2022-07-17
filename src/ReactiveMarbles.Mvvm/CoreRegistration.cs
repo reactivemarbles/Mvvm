@@ -5,24 +5,23 @@
 using System;
 using System.Reactive.Concurrency;
 
-namespace ReactiveMarbles.Mvvm
+namespace ReactiveMarbles.Mvvm;
+
+internal class CoreRegistration : ICoreRegistration
 {
-    internal class CoreRegistration : ICoreRegistration
+    public CoreRegistration(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
     {
-        public CoreRegistration(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
-        {
-            MainThreadScheduler = mainThreadScheduler;
-            TaskPoolScheduler = taskPoolScheduler;
-            ExceptionHandler = exceptionHandler;
-        }
-
-        /// <inheritdoc />
-        public IScheduler MainThreadScheduler { get; }
-
-        /// <inheritdoc />
-        public IScheduler TaskPoolScheduler { get; }
-
-        /// <inheritdoc />
-        public IObserver<Exception> ExceptionHandler { get; }
+        MainThreadScheduler = mainThreadScheduler;
+        TaskPoolScheduler = taskPoolScheduler;
+        ExceptionHandler = exceptionHandler;
     }
+
+    /// <inheritdoc />
+    public IScheduler MainThreadScheduler { get; }
+
+    /// <inheritdoc />
+    public IScheduler TaskPoolScheduler { get; }
+
+    /// <inheritdoc />
+    public IObserver<Exception> ExceptionHandler { get; }
 }

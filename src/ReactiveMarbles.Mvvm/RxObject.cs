@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -19,8 +18,8 @@ using ReactiveMarbles.Locator;
 namespace ReactiveMarbles.Mvvm;
 
 /// <summary>
-/// ReactiveObject is the base object for ViewModel classes, and it
-/// implements INotifyPropertyChanged. In addition, ReactiveObject provides
+/// <see cref="RxObject"/> is the base object for ViewModel classes, and it
+/// implements <see cref="INotifyPropertyChanged"/>. In addition, <see cref="RxObject"/> provides
 /// Changing and Changed Observables to monitor object changes.
 /// </summary>
 public class RxObject : IRxObject
@@ -92,12 +91,12 @@ public class RxObject : IRxObject
         {
             if (Interlocked.Decrement(ref _notification.Value.ChangeNotificationsDelayed) == 0)
             {
-                foreach (var distinctEvent in DistinctEvents(_notification.Value.PropertyChangingEvents.Items.ToList()))
+                foreach (var distinctEvent in _notification.Value.PropertyChangingEvents.Items.DistinctEvents())
                 {
                     PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(distinctEvent.PropertyName));
                 }
 
-                foreach (var distinctEvent in DistinctEvents(_notification.Value.PropertyChangedEvents.Items.ToList()))
+                foreach (var distinctEvent in _notification.Value.PropertyChangedEvents.Items.DistinctEvents())
                 {
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(distinctEvent.PropertyName));
                 }
@@ -213,41 +212,5 @@ public class RxObject : IRxObject
         RaisePropertyChanging(propertyName);
         backingField = newValue;
         RaisePropertyChanged(propertyName);
-    }
-
-    /// <summary>
-    /// Filter a list of change notifications, returning the last change for each PropertyName in original order.
-    /// </summary>
-    private static IEnumerable<TEventArgs> DistinctEvents<TEventArgs>(IList<TEventArgs> events)
-        where TEventArgs : IRxPropertyEventArgs<IRxObject>
-    {
-        if (events.Count <= 1)
-        {
-            return events;
-        }
-
-        var seen = new HashSet<string>();
-        var uniqueEvents = new Stack<TEventArgs>(events.Count);
-
-        for (var i = events.Count - 1; i >= 0; i--)
-        {
-            var propertyName = events[i].PropertyName;
-            if (propertyName is not null && seen.Add(propertyName))
-            {
-                uniqueEvents.Push(events[i]);
-            }
-        }
-
-        // Stack enumerates in LIFO order
-        return uniqueEvents;
-    }
-
-    [SuppressMessage("StyleCop", "SA1401", Justification = "Deliberate use of private field")]
-    private class Notifications
-    {
-        public readonly SourceList<RxPropertyChangedEventArgs<IRxObject>> PropertyChangedEvents = new();
-        public readonly SourceList<RxPropertyChangingEventArgs<IRxObject>> PropertyChangingEvents = new();
-        public long ChangeNotificationsDelayed;
-        public long ChangeNotificationsSuppressed;
     }
 }

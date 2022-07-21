@@ -1,5 +1,17 @@
+![License](https://img.shields.io/github/license/ReactiveMarbles/Mvvm.svg) [![Build](https://github.com/reactivemarbles/Mvvm/actions/workflows/ci-build.yml/badge.svg)](https://github.com/reactivemarbles/Mvvm/actions/workflows/ci-build.yml)
+
+
 # Reactive Marbles Mvvm
 A light weight mvvm package for Reactive Marbles to introduce framework abstractions
+
+## NuGet packages
+
+| Name                          | Platform          | NuGet                            |
+| ----------------------------- | ----------------- | -------------------------------- |
+| [ReactiveMarbles.Mvvm][Core]       | Core - Libary     | [![CoreBadge]][Core]             |
+
+[Core]: https://www.nuget.org/packages/ReactiveMarbles.Mvvm/
+[CoreBadge]: https://img.shields.io/nuget/v/ReactiveMarbles.Mvvm.svg
 
 ## Get Started
 

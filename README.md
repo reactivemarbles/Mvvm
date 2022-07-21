@@ -41,3 +41,7 @@ _valueChange =
         .Select(x => x + "Changed")
         .AsValue(onChanged: x => RaisePropertyChanged(nameof(ValueChange)));
 ```
+
+## Benchmarks
+
+To see how Mvvm compares to other frameworks see: [Benchmarks](https://github.com/reactivemarbles/Mvvm/blob/main/src/ReactiveMarbles.Mvvm.Benchmarks/README.MD)

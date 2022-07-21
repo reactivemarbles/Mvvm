@@ -14,7 +14,7 @@ namespace ReactiveMarbles.Mvvm.Tests;
 /// </summary>
 /// <seealso cref="RxObject" />
 [DataContract]
-public class TestFixture : RxObject
+public class RxObjectTestFixture : RxObject
 {
     [IgnoreDataMember]
     private string? _isNotNullString;
@@ -37,9 +37,9 @@ public class TestFixture : RxObject
     private string? _usesExprRaiseSet;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TestFixture"/> class.
+    /// Initializes a new instance of the <see cref="RxObjectTestFixture"/> class.
     /// </summary>
-    public TestFixture() => TestCollection = new ObservableCollectionExtended<int>();
+    public RxObjectTestFixture() => TestCollection = new ObservableCollectionExtended<int>();
 
     /// <summary>
     /// Gets or sets the is not null string.

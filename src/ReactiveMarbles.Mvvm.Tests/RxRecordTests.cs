@@ -13,20 +13,21 @@ using DynamicData;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using ReactiveMarbles.Locator;
+using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 using Xunit;
 
 namespace ReactiveMarbles.Mvvm.Tests;
 
 /// <summary>
-/// Tests for the <see cref="RxObject"/>.
+/// Tests for the <see cref="RxRecord"/>.
 /// </summary>
-public class RxObjectTests
+public class RxRecordTests
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RxObjectTests"/> class.
+    /// Initializes a new instance of the <see cref="RxRecordTests"/> class.
     /// </summary>
-    public RxObjectTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
+    public RxRecordTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
         CoreRegistrationBuilder
             .Create()
             .WithMainThreadScheduler(new TestScheduler())
@@ -43,7 +44,7 @@ public class RxObjectTests
         var beforeSet = "Foo";
         var afterSet = "Bar";
 
-        var fixture = new RxObjectTestFixture { IsOnlyOneWord = beforeSet };
+        var fixture = new RxRecordTestFixture { IsOnlyOneWord = beforeSet };
 
         var beforeFired = false;
         fixture.Changing.Subscribe(
@@ -79,7 +80,7 @@ public class RxObjectTests
     [Fact]
     public void DeferredNotificationsDontShowUpUntilUndeferred()
     {
-        var fixture = new RxObjectTestFixture();
+        var fixture = new RxRecordTestFixture();
         fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
         fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
         var propertyChangingEvents = new List<PropertyChangingEventArgs>();
@@ -135,7 +136,7 @@ public class RxObjectTests
     [Fact]
     public void ExceptionsThrownInSubscribersShouldMarshalToThrownExceptions()
     {
-        var fixture = new RxObjectTestFixture { IsOnlyOneWord = "Foo" };
+        var fixture = new RxRecordTestFixture { IsOnlyOneWord = "Foo" };
 
         fixture.Changed.Subscribe(_ => throw new Exception("Terminate!"));
         fixture.ThrownExceptions.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var exceptionList)
@@ -152,8 +153,8 @@ public class RxObjectTests
     [Fact]
     public void ObservableForPropertyUsingExpression()
     {
-        var fixture = new RxObjectTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        var output = new List<IObservedChange<RxObjectTestFixture, string?>>();
+        var fixture = new RxRecordTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
+        var output = new List<IObservedChange<RxRecordTestFixture, string?>>();
         fixture.ObservableForProperty(x => x.IsNotNullString)
             .Subscribe(x => output.Add(x));
 
@@ -178,7 +179,7 @@ public class RxObjectTests
     [Fact]
     public void RaiseAndSetUsingExpression()
     {
-        var fixture = new RxObjectTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
+        var fixture = new RxRecordTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
         var output = new List<string>();
         fixture.Changed
             .Select(x => x.PropertyName)
@@ -193,10 +194,10 @@ public class RxObjectTests
     }
 
     /// <summary>
-    /// Test that RxObject shouldn't serialize anything extra.
+    /// Test that RxRecord shouldn't serialize anything extra.
     /// </summary>
     [Fact(Skip = "JSONHelper")]
-    public void RxObjectShouldntSerializeAnythingExtra()
+    public void RxRecordShouldntSerializeAnythingExtra()
     {
         // var fixture = new TestFixture
         // {
@@ -218,14 +219,14 @@ public class RxObjectTests
     }
 
     /// <summary>
-    /// Performs a RxObject smoke test.
+    /// Performs a RxRecord smoke test.
     /// </summary>
     [Fact]
-    public void RxObjectSmokeTest()
+    public void RxRecordSmokeTest()
     {
         var outputChanging = new List<string>();
         var output = new List<string>();
-        var fixture = new RxObjectTestFixture();
+        var fixture = new RxRecordTestFixture();
 
         fixture.Changing
             .Select(x => x.PropertyName)
@@ -249,13 +250,13 @@ public class RxObjectTests
     }
 
     /// <summary>
-    /// Tests to make sure that RxObject doesn't rethrow exceptions.
+    /// Tests to make sure that RxRecord doesn't rethrow exceptions.
     /// </summary>
     [Fact]
-    public void RxObjectShouldRethrowException()
+    public void RxRecordShouldRethrowException()
     {
-        var fixture = new RxObjectTestFixture();
-        var observable = fixture.WhenAnyValue(x => x.IsOnlyOneWord).Skip(1);
+        var fixture = new RxRecordTestFixture();
+        var observable = fixture.WhenChanged(x => x.IsOnlyOneWord).Skip(1);
         observable.Subscribe(_ => throw new Exception("This is a test."));
 
         var result = Record.Exception(() => fixture.IsOnlyOneWord = "Two Words");
@@ -275,7 +276,7 @@ public class RxObjectTests
     public void ChangeNotificationsAreNotDelayed() =>
 
         // Given, When, Then
-        new RxObjectTestFixture()
+        new RxRecordTestFixture()
             .AreChangeNotificationsDelayed()
             .Should()
             .BeFalse();
@@ -287,7 +288,7 @@ public class RxObjectTests
     public void ChangeNotificationsAreDelayed()
     {
         // Given
-        var fixture = new RxObjectTestFixture();
+        var fixture = new RxRecordTestFixture();
 
         // When
         using var disposable = fixture.DelayChangeNotifications();
@@ -306,7 +307,7 @@ public class RxObjectTests
     public void ChangeNotificationsAreEnabled() =>
 
         // Given, When, Then
-        new RxObjectTestFixture()
+        new RxRecordTestFixture()
             .AreChangeNotificationsEnabled()
             .Should()
             .BeTrue();
@@ -318,7 +319,7 @@ public class RxObjectTests
     public void ChangeNotificationsAreSuppressed()
     {
         // Given
-        var fixture = new RxObjectTestFixture();
+        var fixture = new RxRecordTestFixture();
 
         // When
         using var disposable = fixture.SuppressChangeNotifications();

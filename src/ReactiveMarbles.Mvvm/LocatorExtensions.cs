@@ -23,11 +23,17 @@ public static class LocatorExtensions
     /// <param name="taskPoolScheduler">The task pool scheduler.</param>
     /// <param name="exceptionHandler">The exception handler.</param>
     /// <returns>The service locator.</returns>
-    public static IServiceLocator AddCoreRegistrations(this IServiceLocator serviceLocator, IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
-    {
-        serviceLocator.AddService(() => new CoreRegistration(mainThreadScheduler, taskPoolScheduler, exceptionHandler));
-        return serviceLocator;
-    }
+    public static IServiceLocator AddCoreRegistrations(
+        this IServiceLocator serviceLocator,
+        IScheduler mainThreadScheduler,
+        IScheduler taskPoolScheduler,
+        IObserver<Exception> exceptionHandler) =>
+        serviceLocator
+            .AddCoreRegistrations(() =>
+                new CoreRegistration(
+                    mainThreadScheduler,
+                    taskPoolScheduler,
+                    exceptionHandler));
 
     /// <summary>
     /// Adds core registrations to the locator.

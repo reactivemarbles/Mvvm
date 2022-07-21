@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
+		<NoWarn>$(NoWarn);SA1309;SA1101</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

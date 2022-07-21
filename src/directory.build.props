@@ -19,6 +19,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Platform>AnyCPU</Platform>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
+    <IsBenchmark>$(MSBuildProjectName.Contains('Benchmarks'))</IsBenchmark>
     <DebugType>embedded</DebugType>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
@@ -27,9 +28,11 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' != 'true'">
+  <ItemGroup Condition="'$(IsTestProject)' != 'true' AND '$(IsBenchmark)' != 'true'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
@@ -43,7 +46,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\docs"/>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(IsTestProject)' != 'true' AND '$(IsBenchmark)' != 'true'">
     <PackageReference Include="Nerdbank.GitVersioning">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -51,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" IncludeAssets="analyzers;build;buildMultitargeting;buildTransitive" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

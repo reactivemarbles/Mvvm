@@ -1,3 +1,7 @@
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// ReactiveUI Association Incorporated licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for full license information.
+
 using BenchmarkDotNet.Running;
 
 namespace ReactiveMarbles.Mvvm.Benchmarks
@@ -13,7 +17,7 @@ namespace ReactiveMarbles.Mvvm.Benchmarks
         /// <param name="args">Arguments from the command line.</param>
         public static void Main(string[] args)
         {
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+            _ = BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
         }
     }
 }

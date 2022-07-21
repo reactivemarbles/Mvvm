@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -36,14 +36,14 @@ public sealed class ValueBinder<T> : IDisposable
     {
         var subject = new ProxyScheduledSubject<T>(scheduler ?? CurrentThreadScheduler.Instance);
         Value = initialValue.Invoke();
-        subject
+        _ = subject
             .Subscribe(value =>
             {
                 onChanging?.Invoke(value);
                 Value = value;
                 onChanged.Invoke(value);
             }).DisposeWith(_disposable);
-        source.DistinctUntilChanged().StartWith(Value).Subscribe(subject).DisposeWith(_disposable);
+        _ = source.DistinctUntilChanged().StartWith(Value).Subscribe(subject).DisposeWith(_disposable);
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -9,12 +9,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 using DynamicData;
+
 using FluentAssertions;
+
 using Microsoft.Reactive.Testing;
+
 using ReactiveMarbles.Locator;
 using ReactiveMarbles.PropertyChanged;
+
 using ReactiveUI;
+
 using Xunit;
 
 namespace ReactiveMarbles.Mvvm.Tests;
@@ -27,13 +33,16 @@ public class RxRecordTests
     /// <summary>
     /// Initializes a new instance of the <see cref="RxRecordTests"/> class.
     /// </summary>
-    public RxRecordTests() => ServiceLocator.Current().AddCoreRegistrations(() =>
+    public RxRecordTests()
+    {
+        _ = ServiceLocator.Current().AddCoreRegistrations(() =>
         CoreRegistrationBuilder
             .Create()
             .WithMainThreadScheduler(new TestScheduler())
             .WithTaskPoolScheduler(new TestScheduler())
             .WithExceptionHandler(new DebugExceptionHandler())
             .Build());
+    }
 
     /// <summary>
     /// Test that changing values should always arrive before changed.
@@ -44,10 +53,10 @@ public class RxRecordTests
         var beforeSet = "Foo";
         var afterSet = "Bar";
 
-        var fixture = new RxRecordTestFixture { IsOnlyOneWord = beforeSet };
+        RxRecordTestFixture? fixture = new() { IsOnlyOneWord = beforeSet };
 
         var beforeFired = false;
-        fixture.Changing.Subscribe(
+        _ = fixture.Changing.Subscribe(
             _ =>
             {
                 // XXX: The content of these asserts don't actually get
@@ -60,7 +69,7 @@ public class RxRecordTests
             });
 
         var afterFired = false;
-        fixture.Changed.Subscribe(
+        _ = fixture.Changed.Subscribe(
             _ =>
             {
                 Assert.Equal("IsOnlyOneWord", _.PropertyName);
@@ -70,8 +79,8 @@ public class RxRecordTests
 
         fixture.IsOnlyOneWord = afterSet;
 
-        beforeFired.Should().BeTrue();
-        afterFired.Should().BeTrue();
+        _ = beforeFired.Should().BeTrue();
+        _ = afterFired.Should().BeTrue();
     }
 
     /// <summary>
@@ -80,12 +89,12 @@ public class RxRecordTests
     [Fact]
     public void DeferredNotificationsDontShowUpUntilUndeferred()
     {
-        var fixture = new RxRecordTestFixture();
-        fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
-        fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
-        var propertyChangingEvents = new List<PropertyChangingEventArgs>();
+        RxRecordTestFixture? fixture = new();
+        _ = fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
+        _ = fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
+        List<PropertyChangingEventArgs>? propertyChangingEvents = new();
         fixture.PropertyChanging += (_, args) => propertyChangingEvents.Add(args);
-        var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+        List<PropertyChangedEventArgs>? propertyChangedEvents = new();
         fixture.PropertyChanged += (_, args) => propertyChangedEvents.Add(args);
 
         AssertCount(0, changing, changed, propertyChangingEvents, propertyChangedEvents);
@@ -136,15 +145,15 @@ public class RxRecordTests
     [Fact]
     public void ExceptionsThrownInSubscribersShouldMarshalToThrownExceptions()
     {
-        var fixture = new RxRecordTestFixture { IsOnlyOneWord = "Foo" };
+        RxRecordTestFixture? fixture = new() { IsOnlyOneWord = "Foo" };
 
-        fixture.Changed.Subscribe(_ => throw new Exception("Terminate!"));
-        fixture.ThrownExceptions.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var exceptionList)
+        _ = fixture.Changed.Subscribe(_ => throw new Exception("Terminate!"));
+        _ = fixture.ThrownExceptions.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var exceptionList)
             .Subscribe();
 
         fixture.IsOnlyOneWord = "Bar";
 
-        exceptionList.Should().HaveCount(1);
+        _ = exceptionList.Should().HaveCount(1);
     }
 
     /// <summary>
@@ -153,10 +162,10 @@ public class RxRecordTests
     [Fact]
     public void ObservableForPropertyUsingExpression()
     {
-        var fixture = new RxRecordTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        var output = new List<IObservedChange<RxRecordTestFixture, string?>>();
-        fixture.ObservableForProperty(x => x.IsNotNullString)
-            .Subscribe(x => output.Add(x));
+        RxRecordTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
+        List<IObservedChange<RxRecordTestFixture, string?>>? output = new();
+        _ = fixture.ObservableForProperty(x => x.IsNotNullString)
+            .Subscribe(output.Add);
 
         fixture.IsNotNullString = "Bar";
         fixture.IsNotNullString = "Baz";
@@ -164,13 +173,13 @@ public class RxRecordTests
 
         fixture.IsOnlyOneWord = "Bamf";
 
-        output.Should().HaveCount(2);
-        output[0].Sender.Should().Be(fixture);
-        output[0].GetPropertyName().Should().Be("IsNotNullString");
-        output[0].Value.Should().Be("Bar");
-        output[1].Sender.Should().Be(fixture);
-        output[1].GetPropertyName().Should().Be("IsNotNullString");
-        output[1].Value.Should().Be("Baz");
+        _ = output.Should().HaveCount(2);
+        _ = output[0].Sender.Should().Be(fixture);
+        _ = output[0].GetPropertyName().Should().Be("IsNotNullString");
+        _ = output[0].Value.Should().Be("Bar");
+        _ = output[1].Sender.Should().Be(fixture);
+        _ = output[1].GetPropertyName().Should().Be("IsNotNullString");
+        _ = output[1].Value.Should().Be("Baz");
     }
 
     /// <summary>
@@ -179,18 +188,18 @@ public class RxRecordTests
     [Fact]
     public void RaiseAndSetUsingExpression()
     {
-        var fixture = new RxRecordTestFixture { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        var output = new List<string>();
-        fixture.Changed
+        RxRecordTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
+        List<string?>? output = new();
+        _ = fixture.Changed
             .Select(x => x.PropertyName)
-            .Subscribe(x => output.Add(x));
+            .Subscribe(output.Add);
 
         fixture.UsesExprRaiseSet = "Foo";
         fixture.UsesExprRaiseSet = "Foo"; // This one shouldn't raise a change notification
 
-        fixture.UsesExprRaiseSet.Should().Be("Foo");
-        output.Should().HaveCount(1);
-        output.Should().ContainSingle(x => x == "UsesExprRaiseSet");
+        _ = fixture.UsesExprRaiseSet.Should().Be("Foo");
+        _ = output.Should().HaveCount(1);
+        _ = output.Should().ContainSingle(x => x == "UsesExprRaiseSet");
     }
 
     /// <summary>
@@ -224,17 +233,17 @@ public class RxRecordTests
     [Fact]
     public void RxRecordSmokeTest()
     {
-        var outputChanging = new List<string>();
-        var output = new List<string>();
-        var fixture = new RxRecordTestFixture();
+        List<string?>? outputChanging = new();
+        List<string?>? output = new();
+        RxRecordTestFixture? fixture = new();
 
-        fixture.Changing
+        _ = fixture.Changing
             .Select(x => x.PropertyName)
-            .Subscribe(x => outputChanging.Add(x));
+            .Subscribe(outputChanging.Add);
 
-        fixture.Changed
+        _ = fixture.Changed
             .Select(x => x.PropertyName)
-            .Subscribe(x => output.Add(x));
+            .Subscribe(output.Add);
 
         fixture.IsNotNullString = "Foo Bar Baz";
         fixture.IsOnlyOneWord = "Foo";
@@ -244,9 +253,9 @@ public class RxRecordTests
 
         var results = new[] { "IsNotNullString", "IsOnlyOneWord", "IsOnlyOneWord", "IsNotNullString" };
 
-        output.Should().BeEquivalentTo(outputChanging);
-        results.Length.Should().Be(output.Count);
-        results.Should().BeEquivalentTo(output);
+        _ = output.Should().BeEquivalentTo(outputChanging);
+        _ = results.Length.Should().Be(output.Count);
+        _ = results.Should().BeEquivalentTo(output);
     }
 
     /// <summary>
@@ -255,13 +264,13 @@ public class RxRecordTests
     [Fact]
     public void RxRecordShouldRethrowException()
     {
-        var fixture = new RxRecordTestFixture();
+        RxRecordTestFixture? fixture = new();
         var observable = fixture.WhenChanged(x => x.IsOnlyOneWord).Skip(1);
-        observable.Subscribe(_ => throw new Exception("This is a test."));
+        _ = observable.Subscribe(_ => throw new Exception("This is a test."));
 
         var result = Record.Exception(() => fixture.IsOnlyOneWord = "Two Words");
 
-        result.Should()
+        _ = result.Should()
             .BeOfType<Exception>()
             .Which
             .Message
@@ -273,13 +282,14 @@ public class RxRecordTests
     /// Tests that change notifications are not delayed.
     /// </summary>
     [Fact]
-    public void ChangeNotificationsAreNotDelayed() =>
-
+    public void ChangeNotificationsAreNotDelayed()
+    {
         // Given, When, Then
-        new RxRecordTestFixture()
+        _ = new RxRecordTestFixture()
             .AreChangeNotificationsDelayed()
             .Should()
             .BeFalse();
+    }
 
     /// <summary>
     /// Tests that change notifications are delayed.
@@ -288,13 +298,13 @@ public class RxRecordTests
     public void ChangeNotificationsAreDelayed()
     {
         // Given
-        var fixture = new RxRecordTestFixture();
+        RxRecordTestFixture? fixture = new();
 
         // When
         using var disposable = fixture.DelayChangeNotifications();
 
         // Then
-        fixture
+        _ = fixture
             .AreChangeNotificationsDelayed()
             .Should()
             .BeTrue();
@@ -304,13 +314,14 @@ public class RxRecordTests
     /// Tests that change notifications are enabled.
     /// </summary>
     [Fact]
-    public void ChangeNotificationsAreEnabled() =>
-
+    public void ChangeNotificationsAreEnabled()
+    {
         // Given, When, Then
-        new RxRecordTestFixture()
+        _ = new RxRecordTestFixture()
             .AreChangeNotificationsEnabled()
             .Should()
             .BeTrue();
+    }
 
     /// <summary>
     /// Tests that change notifications are suppressed.
@@ -319,13 +330,13 @@ public class RxRecordTests
     public void ChangeNotificationsAreSuppressed()
     {
         // Given
-        var fixture = new RxRecordTestFixture();
+        RxRecordTestFixture? fixture = new();
 
         // When
         using var disposable = fixture.SuppressChangeNotifications();
 
         // Then
-        fixture
+        _ = fixture
             .AreChangeNotificationsEnabled()
             .Should()
             .BeFalse();

@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -18,13 +18,15 @@ public class AsLazyValueTestObject : RxObject
     /// <summary>
     /// Initializes a new instance of the <see cref="AsLazyValueTestObject"/> class.
     /// </summary>
-    public AsLazyValueTestObject() =>
+    public AsLazyValueTestObject()
+    {
         _fullName =
             this.WhenChanged(
                     x => x.FirstName,
                     x => x.LastName,
                     (first, last) => first + last)
                 .AsLazyValue(onChanged: _ => RaisePropertyChanged(nameof(FullName)));
+    }
 
     /// <summary>
     /// Gets or sets the first name.

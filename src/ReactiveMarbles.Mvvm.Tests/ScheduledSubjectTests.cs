@@ -1,11 +1,14 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
 using System.Reactive;
+
 using FluentAssertions;
+
 using Microsoft.Reactive.Testing;
+
 using Xunit;
 
 namespace ReactiveMarbles.Mvvm.Tests;
@@ -23,15 +26,15 @@ public class ScheduledSubjectTests
     {
         // Given
         Unit? result = null;
-        var scheduler = new TestScheduler();
-        var sut = new ProxyScheduledSubject<Unit>(scheduler);
-        sut.Subscribe(actual => result = actual);
+        TestScheduler? scheduler = new();
+        ProxyScheduledSubject<Unit>? sut = new(scheduler);
+        _ = sut.Subscribe(actual => result = actual);
 
         // When
         sut.OnNext(Unit.Default);
         scheduler.Start();
 
         // Then
-        result.HasValue.Should().BeTrue();
+        _ = result.HasValue.Should().BeTrue();
     }
 }

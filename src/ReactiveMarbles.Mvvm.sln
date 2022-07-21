@@ -1,10 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Mvvm", "ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj", "{12FCC761-EA3D-4443-9D88-BE03B3D6C802}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Mvvm", "ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj", "{12FCC761-EA3D-4443-9D88-BE03B3D6C802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Mvvm.Tests", "ReactiveMarbles.Mvvm.Tests\ReactiveMarbles.Mvvm.Tests.csproj", "{1179097F-2B50-4892-8FA7-CD2AFC5E6D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Mvvm.Tests", "ReactiveMarbles.Mvvm.Tests\ReactiveMarbles.Mvvm.Tests.csproj", "{1179097F-2B50-4892-8FA7-CD2AFC5E6D3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveMarbles.Mvvm.Benchmarks", "ReactiveMarbles.Mvvm.Benchmarks\ReactiveMarbles.Mvvm.Benchmarks.csproj", "{16D18273-3F1A-4596-9324-0B6CC951E1BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveMarbles.Mvvm.Benchmarks", "ReactiveMarbles.Mvvm.Benchmarks\ReactiveMarbles.Mvvm.Benchmarks.csproj", "{16D18273-3F1A-4596-9324-0B6CC951E1BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5957A7E7-ADF4-43BA-B555-3F7DD05A72A2}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		directory.build.props = directory.build.props
+		directory.build.targets = directory.build.targets
+		directory.packages.props = directory.packages.props
+		nuget.config = nuget.config
+		stylecop.json = stylecop.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +37,11 @@ Global
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16D18273-3F1A-4596-9324-0B6CC951E1BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE26C39D-3A31-4AD0-B642-EDF83893FE48}
 	EndGlobalSection
 EndGlobal

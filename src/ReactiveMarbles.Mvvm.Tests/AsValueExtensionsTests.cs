@@ -1,10 +1,13 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using FluentAssertions;
+
 using Microsoft.Reactive.Testing;
+
 using ReactiveMarbles.PropertyChanged;
+
 using Xunit;
 
 namespace ReactiveMarbles.Mvvm.Tests;
@@ -21,10 +24,10 @@ public class AsValueExtensionsTests
     public void GivenNoChanges_WhenAsValue_ThenFullNameIsEmpty()
     {
         // Given, When
-        var sut = new AsValueTestObject();
+        AsValueTestObject? sut = new();
 
         // Then
-        sut.FullName.Should().BeNullOrEmpty();
+        _ = sut.FullName.Should().BeNullOrEmpty();
     }
 
     /// <summary>
@@ -33,18 +36,19 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenSequence_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
-
-        // When
-        sut.FirstName = first;
-        sut.LastName = last;
+        AsValueTestObject? sut = new()
+        {
+            // When
+            FirstName = first,
+            LastName = last,
+        };
 
         // Then
-        sut.FullName.Should().Be(first + last);
+        _ = sut.FullName.Should().Be(first + last);
     }
 
     /// <summary>
@@ -53,17 +57,20 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1163:Unused parameter.", Justification = "Deliberate")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "Deliberate")]
     public void GivenFirstName_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
-
-        // When
-        sut.FirstName = first;
+        AsValueTestObject? sut = new()
+        {
+            // When
+            FirstName = first,
+        };
 
         // Then
-        sut.FullName.Should().Be(first);
+        _ = sut.FullName.Should().Be(first);
     }
 
     /// <summary>
@@ -72,17 +79,20 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Roslynator", "RCS1163:Unused parameter.", Justification = "Deliberate")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "Deliberate")]
     public void GivenLastName_WhenAsValue_ThenPropertyProduced(string first, string last)
     {
         // Given
-        var sut = new AsValueTestObject();
-
-        // When
-        sut.LastName = last;
+        AsValueTestObject? sut = new()
+        {
+            // When
+            LastName = last,
+        };
 
         // Then
-        sut.FullName.Should().Be(last);
+        _ = sut.FullName.Should().Be(last);
     }
 
     /// <summary>
@@ -91,11 +101,11 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenOnChanged_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        AsValueTestObject? testObject = new();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -106,7 +116,7 @@ public class AsValueExtensionsTests
         testObject.LastName = last;
 
         // Then
-        sut.Value.Should().Be(first + last);
+        _ = sut.Value.Should().Be(first + last);
     }
 
     /// <summary>
@@ -115,11 +125,11 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenOnChangedAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        AsValueTestObject? testObject = new();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -130,7 +140,7 @@ public class AsValueExtensionsTests
         testObject.LastName = last;
 
         // Then
-        sut.Value.Should().Be(first + last);
+        _ = sut.Value.Should().Be(first + last);
     }
 
     /// <summary>
@@ -139,11 +149,11 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenOnChangedAndOnChangingAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var testObject = new AsValueTestObject();
+        AsValueTestObject? testObject = new();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -154,7 +164,7 @@ public class AsValueExtensionsTests
         testObject.LastName = last;
 
         // Then
-        sut.Value.Should().Be(first + last);
+        _ = sut.Value.Should().Be(first + last);
     }
 
     /// <summary>
@@ -163,12 +173,12 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenOnChangedAndOnChangingAndSchedulerAndInitialValue_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var scheduler = new TestScheduler();
-        var testObject = new AsValueTestObject();
+        TestScheduler? scheduler = new();
+        AsValueTestObject? testObject = new();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -180,7 +190,7 @@ public class AsValueExtensionsTests
         scheduler.Start();
 
         // Then
-        sut.Value.Should().Be(first + last);
+        _ = sut.Value.Should().Be(first + last);
     }
 
     /// <summary>
@@ -189,12 +199,12 @@ public class AsValueExtensionsTests
     /// <param name="first">The first name.</param>
     /// <param name="last">The last name.</param>
     [Theory]
-    [MemberData(nameof(AsValueTestData.Data), MemberType=typeof(AsValueTestData))]
+    [MemberData(nameof(AsValueTestData.Data), MemberType = typeof(AsValueTestData))]
     public void GivenAllParameters_WhenAsValue_ThenValueCorrect(string first, string last)
     {
         // Given
-        var scheduler = new TestScheduler();
-        var testObject = new AsValueTestObject();
+        TestScheduler? scheduler = new();
+        AsValueTestObject? testObject = new();
         var sut =
             testObject
                 .WhenChanged(x => x.FirstName, x => x.LastName, (firstName, lastName) => firstName + lastName)
@@ -206,6 +216,6 @@ public class AsValueExtensionsTests
         scheduler.Start();
 
         // Then
-        sut.Value.Should().Be(first + last);
+        _ = sut.Value.Should().Be(first + last);
     }
 }

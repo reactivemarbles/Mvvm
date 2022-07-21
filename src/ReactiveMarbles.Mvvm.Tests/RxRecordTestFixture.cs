@@ -1,10 +1,11 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+
 using DynamicData.Binding;
 
 namespace ReactiveMarbles.Mvvm.Tests;
@@ -39,7 +40,10 @@ public record RxRecordTestFixture : RxRecord
     /// <summary>
     /// Initializes a new instance of the <see cref="RxRecordTestFixture"/> class.
     /// </summary>
-    public RxRecordTestFixture() => TestCollection = new ObservableCollectionExtended<int>();
+    public RxRecordTestFixture()
+    {
+        TestCollection = new ObservableCollectionExtended<int>();
+    }
 
     /// <summary>
     /// Gets or sets the is not null string.

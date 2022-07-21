@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -17,7 +17,7 @@ namespace ReactiveMarbles.Mvvm;
 /// <typeparam name="T">The type of item being dispatched by the Subject.</typeparam>
 public class ProxyScheduledSubject<T> : ISubject<T>, IDisposable
 {
-    private readonly CompositeDisposable _disposables = new CompositeDisposable();
+    private readonly CompositeDisposable _disposables = new();
     private readonly IObserver<T> _defaultObserver;
     private readonly IScheduler _scheduler;
     private readonly ISubject<T> _subject;
@@ -63,7 +63,7 @@ public class ProxyScheduledSubject<T> : ISubject<T>, IDisposable
     {
         Interlocked.Exchange(ref _defaultObserverSub, Disposable.Empty).Dispose();
 
-        Interlocked.Increment(ref _observerRefCount);
+        _ = Interlocked.Increment(ref _observerRefCount);
 
         return new CompositeDisposable(
             _subject.ObserveOn(_scheduler).Subscribe(observer),

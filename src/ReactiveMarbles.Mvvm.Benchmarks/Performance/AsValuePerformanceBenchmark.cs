@@ -1,48 +1,73 @@
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// ReactiveUI Association Incorporated licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for full license information.
+
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+
 using ReactiveMarbles.Mvvm.Benchmarks.Memory;
 using ReactiveMarbles.PropertyChanged;
+
 using ReactiveUI;
 
 namespace ReactiveMarbles.Mvvm.Benchmarks.Performance
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
+    /// <summary>
+    /// Benchmark for the AsValue.
+    /// </summary>
+    [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
     public class AsValuePerformanceBenchmark
     {
+        /// <summary>
+        /// Benchmarks AsValue.
+        /// </summary>
         [Benchmark(Baseline = true)]
         [BenchmarkCategory("Performance")]
         public void AsValueBenchmark()
         {
-            var thing = new DummyRxObject();
+            DummyRxObject? thing = new();
             var sut = thing.WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one).AsValue(onChanged: _ => { });
         }
 
+        /// <summary>
+        /// Benchmarks AsValue when word changes.
+        /// </summary>
         [Benchmark]
         [BenchmarkCategory("Performance")]
         public void AsValueWhenWordChangedBenchmark()
         {
-            var thing = new DummyRxObject();
-            thing.IsOnlyOneWord = "Two Words";
+            _ = new DummyRxObject
+            {
+                IsOnlyOneWord = "Two Words",
+            };
         }
 
+        /// <summary>
+        /// Benchmarks ToProperty performance.
+        /// </summary>
         [Benchmark]
         [BenchmarkCategory("Performance")]
         public void ToPropertyBenchmark()
         {
-            var thing = new DummyReactiveObject();
+            DummyReactiveObject? thing = new();
             var sut = thing.WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one).ToProperty(thing, x => x.ObservableProperty);
         }
 
+        /// <summary>
+        /// Benchmarks ToProperty when a word changes.
+        /// </summary>
         [Benchmark]
         [BenchmarkCategory("Performance")]
         public void ToPropertyWhenWordChangedBenchmark()
         {
-            var thing = new DummyReactiveObject();
-            thing.IsOnlyOneWord = "Two Words";
+            _ = new DummyReactiveObject()
+            {
+                IsOnlyOneWord = "Two Words",
+            };
         }
     }
 }

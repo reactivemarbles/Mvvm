@@ -1,18 +1,19 @@
-// Copyright (c) 2019-2021 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using DynamicData;
+
 using ReactiveMarbles.Locator;
 
 namespace ReactiveMarbles.Mvvm;
@@ -25,8 +26,8 @@ namespace ReactiveMarbles.Mvvm;
 public class RxObject : IRxObject
 {
     private const string InvalidOperationMessage = "Cannot cast Sender to an IRxObject";
-    private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(() =>
-        new ProxyScheduledSubject<Exception>(Scheduler.Immediate, ServiceLocator.Current().GetService<ICoreRegistration>().ExceptionHandler), LazyThreadSafetyMode.PublicationOnly);
+    private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(
+        () => new ProxyScheduledSubject<Exception>(Scheduler.Immediate, ServiceLocator.Current().GetService<ICoreRegistration>().ExceptionHandler), LazyThreadSafetyMode.PublicationOnly);
 
     private readonly Lazy<Notifications> _notification = new(() => new Notifications());
 
@@ -78,14 +79,14 @@ public class RxObject : IRxObject
     /// <inheritdoc/>
     public IDisposable SuppressChangeNotifications()
     {
-        Interlocked.Increment(ref _notification.Value.ChangeNotificationsSuppressed);
+        _ = Interlocked.Increment(ref _notification.Value.ChangeNotificationsSuppressed);
         return Disposable.Create(() => Interlocked.Decrement(ref _notification.Value.ChangeNotificationsSuppressed));
     }
 
     /// <inheritdoc/>
     public IDisposable DelayChangeNotifications()
     {
-        Interlocked.Increment(ref _notification.Value.ChangeNotificationsDelayed);
+        _ = Interlocked.Increment(ref _notification.Value.ChangeNotificationsDelayed);
 
         return Disposable.Create(() =>
         {

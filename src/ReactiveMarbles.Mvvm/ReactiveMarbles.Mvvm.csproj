@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Include="..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="DynamicData" />
       <PackageReference Include="ReactiveMarbles.Extensions" />
       <PackageReference Include="ReactiveMarbles.Locator" />

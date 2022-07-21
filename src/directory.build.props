@@ -7,7 +7,7 @@
     <PackageProjectUrl>https://github.com/reactivemarbles/Mvvm</PackageProjectUrl>
     <PackageDescription>Common base classes for the MVVM pattern for Reactive Marbles.</PackageDescription>
     <PackageIcon>logo.png</PackageIcon>
-    <PackageReadmeFile>docs\GET_STARTED.md</PackageReadmeFile>
+    <PackageReadmeFile>docs\README.md</PackageReadmeFile>
     <Owners>glennawatson;rlittlesii</Owners>
     <PackageTags>system.reactive;propertychanged;inpc;reactive;functional;mvvm</PackageTags>
     <PackageReleaseNotes>https://github.com/reactivemarbles/Mvvm/releases</PackageReleaseNotes>
@@ -40,7 +40,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
     <None Include="$(MSBuildThisFileDirectory)..\images\logo.png" Pack="true" PackagePath="\"/>
-    <None Include="$(MSBuildThisFileDirectory)..\docs\GET_STARTED.md" Pack="true" PackagePath="\docs"/>
+    <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\docs"/>
   </ItemGroup>
 
   <ItemGroup>

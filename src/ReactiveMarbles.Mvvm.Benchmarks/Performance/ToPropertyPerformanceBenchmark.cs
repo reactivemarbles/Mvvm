@@ -14,33 +14,36 @@ using ReactiveUI;
 namespace ReactiveMarbles.Mvvm.Benchmarks.Performance;
 
 /// <summary>
-/// Benchmark for the AsValue.
+/// Benchmark for the ToProperty.
 /// </summary>
 [SimpleJob(RuntimeMoniker.Net60)]
 [MemoryDiagnoser]
 [MarkdownExporterAttribute.GitHub]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
-public class AsValuePerformanceBenchmark
+public class ToPropertyPerformanceBenchmark
 {
     /// <summary>
-    /// Benchmarks AsValue.
-    /// </summary>
-    [Benchmark(Baseline = true)]
-    [BenchmarkCategory("Performance")]
-    public void AsValueBenchmark()
-    {
-        DummyRxObject thing = new();
-        var unused = thing.WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one).AsValue(onChanged: _ => { });
-    }
-
-    /// <summary>
-    /// Benchmarks AsValue when word changes.
+    /// Benchmarks ToProperty performance.
     /// </summary>
     [Benchmark]
     [BenchmarkCategory("Performance")]
-    public void AsValueWhenWordChangedBenchmark()
+    public void ToPropertyBenchmark()
     {
-        _ = new DummyRxObject
+        DummyReactiveObject thing = new();
+        var unused =
+            thing
+                .WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one)
+            .ToProperty(thing, x => x.ObservableProperty);
+    }
+
+    /// <summary>
+    /// Benchmarks ToProperty when a word changes.
+    /// </summary>
+    [Benchmark]
+    [BenchmarkCategory("Performance")]
+    public void ToPropertyWhenWordChangedBenchmark()
+    {
+        _ = new DummyReactiveObject
         {
             IsOnlyOneWord = "Two Words",
         };

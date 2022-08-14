@@ -6,7 +6,7 @@ public partial class TestObject
 {
     public TestObject()
     {
-        this.AsValue(Observable.Return("Hello World"), nameof(_myPropertyName));
+        _myPropertyName = this.AsValue(Observable.Return("Hello World"), nameof(_myPropertyName));
         // _myPropertyName = Observable.Return("Hello World!").AsValue(this, nameof(_myPropertyName));
     }
 

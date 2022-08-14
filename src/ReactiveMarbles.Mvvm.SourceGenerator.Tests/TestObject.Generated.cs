@@ -5,19 +5,18 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Tests;
 
 public partial class TestObject : RxObject
 {
-    private IDisposable AsValue(IObservable<string> source, string fieldName)
+    private ValueBinder<string> AsValue(IObservable<string> source, string fieldName)
     {
         switch (fieldName)
         {
             case nameof(_myPropertyName):
-                _myPropertyName = new ValueBinder<string>(source,
+                return new ValueBinder<string>(source,
                     _ => RaisePropertyChanging(nameof(DifferentPropertyName)),
                     _ => RaisePropertyChanged(nameof(DifferentPropertyName)),
                     () => string.Empty);
-                break;
+            default:
+                throw new InvalidOperationException("You broke it!");
         }
-
-        return Disposable.Empty;
     }
 
     public string DifferentPropertyName => _myPropertyName.Value;

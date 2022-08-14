@@ -28,6 +28,9 @@
 
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\ReactiveMarbles.Mvvm.SourceGenerator\Shared\**\*.cs" LinkBase="Shared" />
+    <Compile Update="..\ReactiveMarbles.Mvvm.SourceGenerator\Shared\MethodToSymbolFullyQualifiedComparer.cs">
+      <Link>Shared\MethodToSymbolFullyQualifiedComparer.cs</Link>
+    </Compile>
   </ItemGroup>
 
 <!--  &quot;$(PKGReactiveMarbles_RoslynHelpers)\lib\netstandard2.0\ReactiveMarbles.RoslynHelpers.dll&quot;-->

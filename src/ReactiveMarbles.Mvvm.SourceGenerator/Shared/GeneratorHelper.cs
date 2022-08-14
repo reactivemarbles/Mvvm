@@ -31,23 +31,29 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
                     continue;
                 }
 
-                if (methodSymbol.Parameters.Length != 2)
+                if (methodSymbol.Parameters.Length != 3)
                 {
                     continue;
                 }
 
-                if (methodSymbol.Parameters[1].Type.SpecialType != SpecialType.System_String)
-                {
-                    continue;
-                }
-
-                if (!methodSymbol.Parameters[0].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                if (!methodSymbol.Parameters[1].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                         .StartsWith("global::System.IObservable"))
                 {
                     continue;
                 }
 
+                if (methodSymbol.Parameters[2].Type.SpecialType != SpecialType.System_String)
+                {
+                    continue;
+                }
+
                 validInvocations.Add(methodSymbol);
+            }
+
+            foreach (var validInvocation in validInvocations.GroupBy(x => x.Parameters[0].Type, new MethodToSymbolFullyQualifiedComparer()))
+            {
+                var generated = GenerateSourceCode(validInvocation);
+                addFileNameAndSourceText(validInvocation.Key.Name + ".g.cs", generated);
             }
         }
 
@@ -63,12 +69,13 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             MemberBindingExpressionSyntax { Name.Identifier.Text: "AsValue" }
         };
 
-        private static string SourceCode(IEnumerable<IMethodSymbol> validInvocations)
+        private static string GenerateSourceCode(IEnumerable<IMethodSymbol> validInvocations)
         {
-            foreach (var observableGrouping in validInvocations.GroupBy(x => x.Parameters[0].Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)))
+            foreach (var observableGrouping in validInvocations)
             {
                 foreach (var symbol in observableGrouping.Select(x => x.Parameters[1]).Distinct())
                 {
+                    // TODO: [rlittlesii: August 14, 2022] Generate!
                 }
             }
 

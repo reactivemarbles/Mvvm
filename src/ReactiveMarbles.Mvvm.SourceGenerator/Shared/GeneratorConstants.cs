@@ -9,10 +9,16 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
     /// </summary>
     internal static class GeneratorConstants
     {
-        public const string AsValueExtensionsSource = @"public partial static class AsValueExtensions
+        public const string AsValueExtensionsSource = @"#pragma warning disable
+[global::System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+[global::System.Diagnostics.DebuggerNonUserCode]
+[global::System.Reflection.Obfuscation(Exclude = true)]
+internal partial static class AsValueExtensions
 {
-    public static global::ReactiveMarbles.Mvvm.ValueBinder<T> AsValue<T>(this global::System.IObservable<T> observable)
-    { 
+    public partial static void AsValue<T, TObject>(this global::System.IObservable<T> observable, TObject sourceObject, global::System.Linq.Expressions.Expression<Func<TObject, T>> variableName, [global::System.Runtime.CompilerServices.CallerMemberName] string callerMemberName = null, [global::System.Runtime.CompilerServices.CallerLineNumber] int callerLineNumber = 0, [global::System.Runtime.CompilerServices.CallerArgumentExpression(nameof(variableName)] string callerArgumentExpression = null)
+        where TObject : global::System.ComponentModel.INotifyPropertyChanged
+    {
+        return default!;
     }
 }";
     }

@@ -2,6 +2,8 @@
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Threading;
+
 namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
 {
     /// <summary>
@@ -20,7 +22,8 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             Action<string, string> addFileNameAndSourceText,
             Action<Diagnostic> addDiagnostic,
             Compilation compilation,
-            IEnumerable<InvocationExpressionSyntax> invocations)
+            IEnumerable<InvocationExpressionSyntax> invocations,
+            CancellationToken cancellationToken = default)
         {
             var validInvocations = new List<IMethodSymbol>();
             foreach (var invocation in invocations)

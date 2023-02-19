@@ -40,6 +40,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn40
                 (fileName, sourceText) => context.AddSource(fileName, sourceText),
                 diagnostic => context.ReportDiagnostic(diagnostic),
                 compilation,
-                candidates);
+                candidates,
+                context.CancellationToken);
     }
 }

@@ -13,7 +13,6 @@
     <PackageReleaseNotes>https://github.com/reactivemarbles/Mvvm/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/reactivemarbles/Mvvm</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

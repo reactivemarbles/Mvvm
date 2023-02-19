@@ -13,7 +13,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn38
     [Generator]
     public class AsValueGenerator38 : ISourceGenerator
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Initialize(GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());

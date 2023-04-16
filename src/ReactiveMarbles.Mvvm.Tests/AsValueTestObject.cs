@@ -11,7 +11,7 @@ namespace ReactiveMarbles.Mvvm.Tests;
 /// </summary>
 public class AsValueTestObject : RxObject
 {
-    private readonly ValueBinder<string?> _fullName;
+    private readonly IValueBinder<string?> _fullName;
     private string _firstName = string.Empty;
     private string _lastName = string.Empty;
 

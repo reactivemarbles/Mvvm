@@ -16,7 +16,7 @@ namespace ReactiveMarbles.Mvvm;
 /// from an observable sequence.
 /// </summary>
 /// <typeparam name="T">The value type.</typeparam>
-public sealed class ValueBinder<T> : IDisposable
+internal sealed class ValueBinder<T> : IValueBinder<T>
 {
     private readonly CompositeDisposable _disposable = new();
 

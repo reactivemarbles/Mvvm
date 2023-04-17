@@ -10,7 +10,10 @@
     <ItemGroup>
       <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
-
+    <ItemGroup>
+        <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Benchmarks" />
+        <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Tests" />
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="DynamicData" />
       <PackageReference Include="ReactiveMarbles.Extensions" />

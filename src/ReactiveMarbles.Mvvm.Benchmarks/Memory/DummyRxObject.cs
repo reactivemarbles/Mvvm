@@ -18,7 +18,7 @@ namespace ReactiveMarbles.Mvvm.Benchmarks.Memory;
 /// </summary>
 public class DummyRxObject : RxObject
 {
-    private readonly ValueBinder<string?> _observableProperty;
+    private readonly IValueBinder<string?> _observableProperty;
 
     [IgnoreDataMember]
     private string? _isNotNullString;

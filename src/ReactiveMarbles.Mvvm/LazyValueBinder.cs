@@ -17,7 +17,7 @@ namespace ReactiveMarbles.Mvvm;
 /// notifications.  Using the <see cref="AsValueExtensions"/> methods allows easy creation from an observable sequence.
 /// </summary>
 /// <typeparam name="T">The value type.</typeparam>
-public sealed class LazyValueBinder<T> : IDisposable
+internal sealed class LazyValueBinder<T> : IValueBinder<T>
 {
     private readonly CompositeDisposable _disposable = new();
     private readonly Func<T> _initialValue;

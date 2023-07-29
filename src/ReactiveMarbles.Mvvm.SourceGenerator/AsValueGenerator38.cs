@@ -2,6 +2,7 @@
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using static ReactiveMarbles.Mvvm.SourceGenerator.Shared.GeneratorConstants;
 using static ReactiveMarbles.Mvvm.SourceGenerator.Shared.GeneratorHelper;
 
@@ -38,6 +39,27 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn38
             void ReportDiagnostic(Diagnostic diagnostic) => context.ReportDiagnostic(diagnostic);
 
             GenerateAsValueProperty(AddText, ReportDiagnostic, compilation, receiver.AsValueInvocations);
+        }
+    }
+
+    /// <summary>
+    /// Receives the syntax.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Compiling")]
+    public class SyntaxReceiver : ISyntaxReceiver
+    {
+        /// <summary>
+        /// Gets the list of invocations.
+        /// </summary>
+        public List<InvocationExpressionSyntax> AsValueInvocations { get; } = new List<InvocationExpressionSyntax>();
+
+        /// <inheritdoc/>
+        public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+        {
+            if (IsAsValueNode(syntaxNode) && syntaxNode is InvocationExpressionSyntax invocation)
+            {
+                AsValueInvocations.Add(invocation);
+            }
         }
     }
 }

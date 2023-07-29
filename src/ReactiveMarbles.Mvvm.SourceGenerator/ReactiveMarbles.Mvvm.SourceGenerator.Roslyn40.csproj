@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IsRoslynComponent>true</IsRoslynComponent>
@@ -7,11 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <RootNamespace>ReactiveMarbles.ObservableEvents.SourceGenerator</RootNamespace>
-    <AnalyzerRoslynVersion>3.8</AnalyzerRoslynVersion>
+    <AnalyzerRoslynVersion>4.0</AnalyzerRoslynVersion> 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="3.11.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.0.1" PrivateAssets="all" />
     <PackageReference Include="ReactiveMarbles.RoslynHelpers" PrivateAssets="all" />
   </ItemGroup>
 
@@ -24,7 +25,10 @@
     <Using Include="System.Text" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\ReactiveMarbles.Mvvm.SourceGenerator\Shared\**\*.cs" LinkBase="Shared" />
+    <Compile Remove="AsValueGenerator38.cs" />
   </ItemGroup>
+
+<!--  &quot;$(PKGReactiveMarbles_RoslynHelpers)\lib\netstandard2.0\ReactiveMarbles.RoslynHelpers.dll&quot;-->
 </Project>

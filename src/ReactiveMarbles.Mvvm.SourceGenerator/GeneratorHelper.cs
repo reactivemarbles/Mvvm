@@ -3,10 +3,9 @@
 // See the LICENSE file in the project root for full license information.
 
 using System.Globalization;
-using System.Linq.Expressions;
-using System.Threading;
-using Microsoft.CodeAnalysis.Symbols;
-using Microsoft.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using ReactiveMarbles.RoslynHelpers;
+using static ReactiveMarbles.RoslynHelpers.SyntaxFactoryHelpers;
 
 namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
 {
@@ -15,6 +14,33 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
     /// </summary>
     public static class GeneratorHelper
     {
+        private static readonly ParameterSyntax FieldNameParameter;
+        private static readonly ParameterSyntax CallerMemberNameParameter;
+        private static readonly ParameterSyntax CallerMemberLineNumberParameter;
+        private static readonly ParameterSyntax CallerMemberArgumentExpressionParameter;
+        private static readonly SyntaxKind[] MethodModifier;
+        private static readonly SyntaxKind[] ClassModifier;
+
+        static GeneratorHelper()
+        {
+            FieldNameParameter = Parameter(StringType(), "fieldName");
+            CallerMemberNameParameter = Parameter(new[] { AttributeList(Attribute("global::System.Runtime.CompilerServices.CallerMemberName")) }, StringType(), "callerMemberName", EqualsValueClause(NullLiteral()));
+            CallerMemberLineNumberParameter = Parameter(new[] { AttributeList(Attribute("global::System.Runtime.CompilerServices.CallerLineNumber")) }, IntegerType(), "callerLineNumber", EqualsValueClause(LiteralExpression(0)));
+            CallerMemberArgumentExpressionParameter = Parameter(new[] { AttributeList(Attribute("global::System.Runtime.CompilerServices.CallerArgumentExpression", new[] { AttributeArgument(LiteralExpression("fieldName")) })) }, StringType(), "callerArgumentExpression", EqualsValueClause(NullLiteral()));
+            MethodModifier = new[]
+                             {
+                                 SyntaxKind.PublicKeyword,
+                                 SyntaxKind.PartialKeyword,
+                                 SyntaxKind.StaticKeyword,
+                             };
+            ClassModifier = new SyntaxKind[]
+                            {
+                                SyntaxKind.InternalKeyword,
+                                SyntaxKind.PartialKeyword,
+                                SyntaxKind.StaticKeyword,
+                            };
+        }
+
         /// <summary>
         /// Generate as value property.
         /// </summary>
@@ -75,7 +101,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
 
             foreach (var validInvocation in validInvocations
                          .GroupBy(
-                             methodSymbol => methodSymbol.Parameters[0].Type,
+                             methodSymbol => methodSymbol.MethodSymbol.Parameters[0].Type,
                              new MethodToSymbolFullyQualifiedComparer()))
             {
                 var generated = GenerateSourceCode(validInvocation, cancellationToken);
@@ -99,13 +125,88 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             IEnumerable<(IMethodSymbol MethodSymbol, IFieldSymbol FieldSymbol)> validInvocations,
             CancellationToken cancellationToken)
         {
+            var asValueMethodList = new List<MethodDeclarationSyntax>();
             foreach (var observableGrouping in validInvocations)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var propertyName = GetGeneratedPropertyName(observableGrouping.FieldSymbol);
+
+                //// public partial static global::ReactiveMarbles.Mvvm.ValueBinder<T> AsValue<T, TObject>(this TObject sourceObject, global::System.IObservable<T> observable, string fieldName, [global::System.Runtime.CompilerServices.CallerMemberName] string callerMemberName = null, [global::System.Runtime.CompilerServices.CallerLineNumber] int callerLineNumber = 0, [global::System.Runtime.CompilerServices.CallerArgumentExpression(nameof(variableName)] string callerArgumentExpression = null)
+                ////     where TObject : global::System.ComponentModel.INotifyPropertyChanged
+                //// {
+                ////     return default!;
+                //// }
+
+                asValueMethodList.Add(GenerateMethod(observableGrouping));
+
                 // TODO: [rlittlesii: February 18, 2023] Generate Code.
             }
+            //// internal partial static class AsValueExtensions
 
-            return string.Empty;
+            var classDeclaration = ClassDeclaration(
+                "AsValueExtensions",
+                ClassModifier,
+                asValueMethodList,
+                0);
+
+            return CompilationUnit(
+                    null,
+                    new[]
+                    {
+                        classDeclaration,
+                    },
+                    null)
+                .ToFullString();
+        }
+
+        private static MethodDeclarationSyntax GenerateMethod(
+            (IMethodSymbol MethodSymbol, IFieldSymbol FieldSymbol) observableGrouping)
+        {
+            var fieldTypeString =
+                observableGrouping.FieldSymbol.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var sourceParameter = Parameter(
+                fieldTypeString,
+                "sourceObject",
+                new[]
+                {
+                    SyntaxKind.ThisKeyword,
+                });
+
+            var observableType = IdentifierName(fieldTypeString)
+                .GenerateObservableType();
+            var observableParameter = Parameter(observableType, "observable");
+            var returnType = GenericName(
+                "global::ReactiveMarbles.Mvvm.ValueBinder",
+                new[]
+                {
+                    IdentifierName(fieldTypeString),
+                });
+
+            var block = Block(
+                new StatementSyntax[]
+                { },
+                2);
+            return MethodDeclaration(
+                null,
+                MethodModifier,
+                returnType,
+                null,
+                "AsValue",
+                new[]
+                {
+                    sourceParameter,
+                    observableParameter,
+                    FieldNameParameter,
+                    CallerMemberNameParameter,
+                    CallerMemberLineNumberParameter,
+                    CallerMemberArgumentExpressionParameter,
+                },
+                null,
+                null,
+                block,
+                null,
+                1);
         }
 
         /// <summary>
@@ -176,5 +277,19 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
                     .Select(argumentSyntax => semanticModel.GetConstantValue(argumentSyntax.Expression).Value?.ToString())
                     .FirstOrDefault();
         }
+
+        /// <summary>
+        /// Gets the string type.
+        /// </summary>
+        /// <returns>The void type.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static PredefinedTypeSyntax StringType() => SyntaxFactory.PredefinedType(Token(SyntaxKind.StringKeyword));
+
+        /// <summary>
+        /// Gets the int type.
+        /// </summary>
+        /// <returns>The void type.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static PredefinedTypeSyntax IntegerType() => SyntaxFactory.PredefinedType(Token(SyntaxKind.IntKeyword));
     }
 }

@@ -9,8 +9,6 @@ using BenchmarkDotNet.Jobs;
 using ReactiveMarbles.Mvvm.Benchmarks.Memory;
 using ReactiveMarbles.PropertyChanged;
 
-using ReactiveUI;
-
 namespace ReactiveMarbles.Mvvm.Benchmarks.Performance;
 
 /// <summary>

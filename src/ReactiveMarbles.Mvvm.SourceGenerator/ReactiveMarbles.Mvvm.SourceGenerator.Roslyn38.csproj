@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <RootNamespace>ReactiveMarbles.ObservableEvents.SourceGenerator</RootNamespace>
+    <RootNamespace>ReactiveMarbles.Mvvm.SourceGenerator</RootNamespace>
     <AnalyzerRoslynVersion>3.8</AnalyzerRoslynVersion>
   </PropertyGroup>
 

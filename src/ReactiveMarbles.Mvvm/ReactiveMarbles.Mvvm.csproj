@@ -13,6 +13,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Benchmarks" />
         <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Tests" />
+        <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.SourceGenerator.Tests" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="DynamicData" />

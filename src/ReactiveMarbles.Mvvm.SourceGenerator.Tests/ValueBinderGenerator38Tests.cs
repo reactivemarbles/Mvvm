@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System.IO;
+using System.Threading.Tasks;
 using ReactiveMarbles.Mvvm.SourceGenerator.Roslyn38;
 using Xunit.Abstractions;
 
@@ -16,7 +17,7 @@ public class ValueBinderGenerator38Tests : TestBase<AsValueGenerator38>
     }
 
     [Fact]
-    public void Given_When_Then()
+    public Task Given_When_Then()
     {
         // Given
         var testObjectFile = TestUtilities.GetTestPath("TestObject.cs");
@@ -28,5 +29,6 @@ public class ValueBinderGenerator38Tests : TestBase<AsValueGenerator38>
         // When
 
         // Then
+        return TestHelper.TestPass<AsValueGenerator38>(file, string.Empty, GetType());
     }
 }

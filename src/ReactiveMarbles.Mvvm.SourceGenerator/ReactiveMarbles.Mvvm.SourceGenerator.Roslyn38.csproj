@@ -27,4 +27,8 @@
   <ItemGroup>
     <Compile Remove="AsValueGenerator40.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj" />
+  </ItemGroup>
 </Project>

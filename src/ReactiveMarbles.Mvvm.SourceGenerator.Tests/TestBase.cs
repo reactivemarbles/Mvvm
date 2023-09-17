@@ -5,10 +5,12 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
+using VerifyXunit;
 using Xunit.Abstractions;
 
 namespace ReactiveMarbles.Mvvm.SourceGenerator.Tests
 {
+    [UsesVerify]
     public abstract class TestBase<TSourceGenerator> : IAsyncLifetime, IDisposable
         where TSourceGenerator : ISourceGenerator, new()
     {

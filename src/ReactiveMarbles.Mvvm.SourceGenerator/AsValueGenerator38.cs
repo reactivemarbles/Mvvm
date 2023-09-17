@@ -56,9 +56,14 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn38
         /// <inheritdoc/>
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
-            if (IsAsValueNode(syntaxNode) && syntaxNode is InvocationExpressionSyntax invocation)
+            if (syntaxNode is not InvocationExpressionSyntax invocationExpressionSyntax)
             {
-                AsValueInvocations.Add(invocation);
+                return;
+            }
+
+            if (IsAsValueNode(syntaxNode))
+            {
+                AsValueInvocations.Add(invocationExpressionSyntax);
             }
         }
     }

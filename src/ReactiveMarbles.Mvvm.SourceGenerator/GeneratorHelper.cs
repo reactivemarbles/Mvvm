@@ -60,7 +60,8 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             foreach (var invocation in invocations)
             {
                 var semanticModel = compilation.GetSemanticModel(invocation.SyntaxTree);
-                if (semanticModel.GetSymbolInfo(invocation).Symbol is not
+                var symbol = semanticModel.GetSymbolInfo(invocation).Symbol;
+                if (symbol is not
                     IMethodSymbol methodSymbol)
                 {
                     continue;
@@ -104,7 +105,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
                              methodSymbol => methodSymbol.MethodSymbol.Parameters[0].Type,
                              new MethodToSymbolFullyQualifiedComparer()))
             {
-                var generated = GenerateSourceCode(validInvocation, cancellationToken);
+                var generated = "#pragma warning disable \n" + GenerateSourceCode(validInvocation, cancellationToken);
                 addFileNameAndSourceText(validInvocation.Key.Name + ".g.cs", generated);
             }
         }
@@ -145,7 +146,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             //// internal partial static class AsValueExtensions
 
             var classDeclaration = ClassDeclaration(
-                "AsValueExtensions",
+                "AsValueGeneratedExtensions",
                 ClassModifier,
                 asValueMethodList,
                 0);

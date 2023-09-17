@@ -29,6 +29,7 @@
       <ProjectReference Include="..\ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj" />
     </ItemGroup>
   <ItemGroup>
+    <Compile Remove="TestFiles\**" />
     <None
       Include="TestFiles\**"
       CopyToOutputDirectory="PreserveNewest"

@@ -60,7 +60,8 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Shared
             foreach (var invocation in invocations)
             {
                 var semanticModel = compilation.GetSemanticModel(invocation.SyntaxTree);
-                var symbol = semanticModel.GetSymbolInfo(invocation).Symbol;
+                var symbolInfo = semanticModel.GetSymbolInfo(invocation, cancellationToken);
+                var symbol = symbolInfo.Symbol;
                 if (symbol is not
                     IMethodSymbol methodSymbol)
                 {

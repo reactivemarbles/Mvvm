@@ -31,9 +31,9 @@
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="xunit" Version="2.4.1" />
+    <PackageVersion Include="xunit" Version="2.6.6" />
     <PackageVersion Include="xunit.analyzers" Version="0.10.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.6" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)/directory.packages.support.props" Condition="Exists('$(MSBuildThisFileDirectory)/directory.packages.support.props')" />
 </Project>

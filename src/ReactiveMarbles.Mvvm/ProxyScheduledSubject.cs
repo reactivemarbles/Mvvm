@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -18,7 +18,7 @@ namespace ReactiveMarbles.Mvvm;
 /// <typeparam name="T">The type of item being dispatched by the Subject.</typeparam>
 public class ProxyScheduledSubject<T> : ISubject<T>, IDisposable
 {
-    private readonly CompositeDisposable _disposables = new();
+    private readonly CompositeDisposable _disposables = [];
     private readonly IObserver<T> _defaultObserver;
     private readonly IScheduler _scheduler;
     private readonly ISubject<T> _subject;

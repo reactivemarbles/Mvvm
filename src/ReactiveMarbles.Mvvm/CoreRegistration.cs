@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -7,21 +7,14 @@ using System.Reactive.Concurrency;
 
 namespace ReactiveMarbles.Mvvm;
 
-internal class CoreRegistration : ICoreRegistration
+internal class CoreRegistration(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler) : ICoreRegistration
 {
-    public CoreRegistration(IScheduler mainThreadScheduler, IScheduler taskPoolScheduler, IObserver<Exception> exceptionHandler)
-    {
-        MainThreadScheduler = mainThreadScheduler;
-        TaskPoolScheduler = taskPoolScheduler;
-        ExceptionHandler = exceptionHandler;
-    }
+    /// <inheritdoc />
+    public IScheduler MainThreadScheduler { get; } = mainThreadScheduler;
 
     /// <inheritdoc />
-    public IScheduler MainThreadScheduler { get; }
+    public IScheduler TaskPoolScheduler { get; } = taskPoolScheduler;
 
     /// <inheritdoc />
-    public IScheduler TaskPoolScheduler { get; }
-
-    /// <inheritdoc />
-    public IObserver<Exception> ExceptionHandler { get; }
+    public IObserver<Exception> ExceptionHandler { get; } = exceptionHandler;
 }

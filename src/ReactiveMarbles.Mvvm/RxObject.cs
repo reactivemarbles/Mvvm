@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -129,13 +129,8 @@ public class RxObject : IRxObject
         {
             PropertyChanging?.Invoke(this, args);
         }
-        catch (Exception e)
+        catch (Exception e) when (_thrownExceptions.IsValueCreated)
         {
-            if (!_thrownExceptions.IsValueCreated)
-            {
-                throw;
-            }
-
             _thrownExceptions.Value.OnNext(e);
         }
     }
@@ -161,13 +156,8 @@ public class RxObject : IRxObject
         {
             PropertyChanged?.Invoke(this, args);
         }
-        catch (Exception e)
+        catch (Exception e) when (_thrownExceptions.IsValueCreated)
         {
-            if (!_thrownExceptions.IsValueCreated)
-            {
-                throw;
-            }
-
             _thrownExceptions.Value.OnNext(e);
         }
     }

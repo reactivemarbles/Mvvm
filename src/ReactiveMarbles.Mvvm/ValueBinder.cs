@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -18,7 +18,7 @@ namespace ReactiveMarbles.Mvvm;
 /// <typeparam name="T">The value type.</typeparam>
 internal sealed class ValueBinder<T> : IValueBinder<T>
 {
-    private readonly CompositeDisposable _disposable = new();
+    private readonly CompositeDisposable _disposable = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueBinder{T}"/> class.

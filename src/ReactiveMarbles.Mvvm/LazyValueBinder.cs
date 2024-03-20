@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2022 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -19,7 +19,7 @@ namespace ReactiveMarbles.Mvvm;
 /// <typeparam name="T">The value type.</typeparam>
 internal sealed class LazyValueBinder<T> : IValueBinder<T>
 {
-    private readonly CompositeDisposable _disposable = new();
+    private readonly CompositeDisposable _disposable = [];
     private readonly Func<T> _initialValue;
     private Action? _lazy;
     private T? _value;

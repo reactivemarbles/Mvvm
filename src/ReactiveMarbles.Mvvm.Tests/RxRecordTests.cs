@@ -92,9 +92,9 @@ public class RxRecordTests
         RxRecordTestFixture? fixture = new();
         _ = fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
         _ = fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
-        List<PropertyChangingEventArgs>? propertyChangingEvents = new();
+        List<PropertyChangingEventArgs>? propertyChangingEvents = [];
         fixture.PropertyChanging += (_, args) => propertyChangingEvents.Add(args);
-        List<PropertyChangedEventArgs>? propertyChangedEvents = new();
+        List<PropertyChangedEventArgs>? propertyChangedEvents = [];
         fixture.PropertyChanged += (_, args) => propertyChangedEvents.Add(args);
 
         AssertCount(0, changing, changed, propertyChangingEvents, propertyChangedEvents);
@@ -159,13 +159,13 @@ public class RxRecordTests
     /// <summary>
     /// Tests that ObservableForProperty using expression.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Using ReactiveUI ObservableForProperty for test, results in invalid test as end user wont be using ReactiveUI")]
     public void ObservableForPropertyUsingExpression()
     {
         RxRecordTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        List<IObservedChange<RxRecordTestFixture, string?>>? output = new();
-        _ = fixture.ObservableForProperty(x => x.IsNotNullString)
-            .Subscribe(output.Add);
+        ////List<IObservedChange<RxRecordTestFixture, string?>>? output = new();
+        ////_ = fixture.ObservableForProperty(x => x.IsNotNullString)
+        ////    .Subscribe(output.Add);
 
         fixture.IsNotNullString = "Bar";
         fixture.IsNotNullString = "Baz";
@@ -173,13 +173,13 @@ public class RxRecordTests
 
         fixture.IsOnlyOneWord = "Bamf";
 
-        _ = output.Should().HaveCount(2);
-        _ = output[0].Sender.Should().Be(fixture);
-        _ = output[0].GetPropertyName().Should().Be("IsNotNullString");
-        _ = output[0].Value.Should().Be("Bar");
-        _ = output[1].Sender.Should().Be(fixture);
-        _ = output[1].GetPropertyName().Should().Be("IsNotNullString");
-        _ = output[1].Value.Should().Be("Baz");
+        ////_ = output.Should().HaveCount(2);
+        ////_ = output[0].Sender.Should().Be(fixture);
+        ////_ = output[0].GetPropertyName().Should().Be("IsNotNullString");
+        ////_ = output[0].Value.Should().Be("Bar");
+        ////_ = output[1].Sender.Should().Be(fixture);
+        ////_ = output[1].GetPropertyName().Should().Be("IsNotNullString");
+        ////_ = output[1].Value.Should().Be("Baz");
     }
 
     /// <summary>
@@ -189,7 +189,7 @@ public class RxRecordTests
     public void RaiseAndSetUsingExpression()
     {
         RxRecordTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        List<string?>? output = new();
+        List<string?>? output = [];
         _ = fixture.Changed
             .Select(x => x.PropertyName)
             .Subscribe(output.Add);
@@ -233,8 +233,8 @@ public class RxRecordTests
     [Fact]
     public void RxRecordSmokeTest()
     {
-        List<string?>? outputChanging = new();
-        List<string?>? output = new();
+        List<string?>? outputChanging = [];
+        List<string?>? output = [];
         RxRecordTestFixture? fixture = new();
 
         _ = fixture.Changing

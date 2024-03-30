@@ -42,7 +42,7 @@ public record RxRecordTestFixture : RxRecord
     /// </summary>
     public RxRecordTestFixture()
     {
-        TestCollection = new ObservableCollectionExtended<int>();
+        TestCollection = [];
     }
 
     /// <summary>

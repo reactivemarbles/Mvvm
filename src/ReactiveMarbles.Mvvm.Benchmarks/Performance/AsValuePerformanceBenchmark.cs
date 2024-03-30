@@ -9,8 +9,6 @@ using BenchmarkDotNet.Jobs;
 using ReactiveMarbles.Mvvm.Benchmarks.Memory;
 using ReactiveMarbles.PropertyChanged;
 
-using ReactiveUI;
-
 namespace ReactiveMarbles.Mvvm.Benchmarks.Performance;
 
 /// <summary>
@@ -30,7 +28,9 @@ public class AsValuePerformanceBenchmark
     public void AsValueBenchmark()
     {
         DummyRxObject thing = new();
-        var unused = thing.WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one).AsValue(onChanged: _ => { });
+        var unused = thing
+            .WhenChanged(x => x.NotSerialized, x => x.IsOnlyOneWord, (not, one) => not + one)
+            .AsValue(onChanged: _ => { });
     }
 
     /// <summary>

@@ -20,7 +20,6 @@
     <PackageVersion Include="ReactiveMarbles.Extensions" Version="1.1.13" />
     <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.44" />
     <PackageVersion Include="ReactiveMarbles.PropertyChanged" Version="2.0.27" />
-    <PackageVersion Include="System.Reactive" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />

@@ -16,14 +16,14 @@
     <PackageVersion Include="ReactiveUI" Version="19.5.72" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="DynamicData" Version="8.3.93" />
+    <PackageVersion Include="DynamicData" Version="8.4.1" />
     <PackageVersion Include="ReactiveMarbles.Extensions" Version="1.1.13" />
     <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.44" />
     <PackageVersion Include="ReactiveMarbles.PropertyChanged" Version="2.0.27" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.1" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
     <PackageVersion Include="FluentAssertions.Analyzers" Version="0.31.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />

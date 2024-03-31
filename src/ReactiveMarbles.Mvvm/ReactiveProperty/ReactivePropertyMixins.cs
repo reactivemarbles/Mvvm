@@ -16,7 +16,6 @@ namespace ReactiveMarbles.Mvvm;
 /// </summary>
 public static class ReactivePropertyMixins
 {
-#if !NETSTANDARD
     /// <summary>
     /// Set validation logic from DataAnnotations attributes.
     /// </summary>
@@ -69,7 +68,6 @@ public static class ReactivePropertyMixins
 
         return self;
     }
-#endif
 
     /// <summary>
     /// Create an IObservable instance to observe validation error messages of ReactiveProperty.

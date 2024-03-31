@@ -12,9 +12,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.Serialization;
-#if !NETSTANDARD
 using System.Text.Json.Serialization;
-#endif
 using System.Threading.Tasks;
 using DynamicData.Binding;
 using ReactiveMarbles.Extensions;
@@ -104,9 +102,7 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
     /// The value.
     /// </value>
     [DataMember]
-    #if !NETSTANDARD
     [JsonInclude]
-    #endif
     public T? Value
     {
         get => _value;

@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
-    <PackageVersion Include="ReactiveUI" Version="19.5.72" />
+    <PackageVersion Include="ReactiveUI" Version="19.6.1" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="DynamicData" Version="8.4.1" />

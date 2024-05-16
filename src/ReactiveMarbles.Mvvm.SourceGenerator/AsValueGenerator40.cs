@@ -11,7 +11,7 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn40
     /// Generates AsValue extensions.
     /// </summary>
     [Generator(LanguageNames.CSharp)]
-    public class AsValueGenerator40 : IIncrementalGenerator
+    public class AsValueGenerator40 : IIncrementalGenerator, ISourceGenerator
     {
         /// <inheritdoc />
         public void Initialize(IncrementalGeneratorInitializationContext initContext)
@@ -30,6 +30,18 @@ namespace ReactiveMarbles.Mvvm.SourceGenerator.Roslyn40
                 inputs,
                 (context, collectedValues) =>
                     GenerateInstances(context, collectedValues.Compilation, collectedValues.Candidates));
+        }
+
+        /// <inheritdoc/>
+        void ISourceGenerator.Initialize(GeneratorInitializationContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        void ISourceGenerator.Execute(GeneratorExecutionContext context)
+        {
+            throw new NotImplementedException();
         }
 
         private static void GenerateInstances(

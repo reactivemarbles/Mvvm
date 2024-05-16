@@ -8,7 +8,6 @@
   </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="3.11.0" PrivateAssets="all" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" />
       <PackageReference Include="ReactiveMarbles.SourceGenerator.TestNuGetHelper" />
       <PackageReference Include="Verify.SourceGenerators" />
@@ -26,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ReactiveMarbles.Mvvm.SourceGenerator\ReactiveMarbles.Mvvm.SourceGenerator.Roslyn38.csproj" />
+      <ProjectReference Include="..\ReactiveMarbles.Mvvm.SourceGenerator\ReactiveMarbles.Mvvm.SourceGenerator.Roslyn40.csproj" />
       <ProjectReference Include="..\ReactiveMarbles.Mvvm\ReactiveMarbles.Mvvm.csproj" />
     </ItemGroup>
   <ItemGroup>

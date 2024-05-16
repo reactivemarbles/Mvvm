@@ -21,6 +21,6 @@ internal static partial class AsValueGeneratedExtensions
         string callerArgumentExpression = null)
         where TObject : global::System.ComponentModel.INotifyPropertyChanged
     {
-        return default!;
+        return new ValueBinder<T>(observable, obj => { }, () => default);
     }
 }

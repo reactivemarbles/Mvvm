@@ -109,6 +109,18 @@ public class RxObject : IRxObject
     }
 
     /// <summary>
+    /// Raises a property changed event.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that has changed.</param>
+    protected internal virtual void RaisePropertyChanging([CallerMemberName] string propertyName = "") => RaisePropertyChanging(new PropertyChangingEventArgs(propertyName));
+
+    /// <summary>
+    /// Raises a property changed event.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that has changed.</param>
+    protected internal virtual void RaisePropertyChanged([CallerMemberName] string propertyName = "") => RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
+
+    /// <summary>
     /// Raises the property changing event.
     /// </summary>
     /// <param name="args">The argument.</param>
@@ -161,18 +173,6 @@ public class RxObject : IRxObject
             _thrownExceptions.Value.OnNext(e);
         }
     }
-
-    /// <summary>
-    /// Raises a property changed event.
-    /// </summary>
-    /// <param name="propertyName">The name of the property that has changed.</param>
-    protected virtual void RaisePropertyChanging([CallerMemberName] string propertyName = "") => RaisePropertyChanging(new PropertyChangingEventArgs(propertyName));
-
-    /// <summary>
-    /// Raises a property changed event.
-    /// </summary>
-    /// <param name="propertyName">The name of the property that has changed.</param>
-    protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = "") => RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
 
     /// <summary>
     /// RaiseAndSetIfChanged fully implements a Setter for a read-write

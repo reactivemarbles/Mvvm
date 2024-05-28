@@ -1,24 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-      <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
-      <LangVersion>latest</LangVersion>
-      <PackageDescription>A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable MVVM components that run on any mobile or desktop platform. This is the base package with the base platform implementations</PackageDescription>
-      <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <PackageDescription>A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable MVVM components that run on any mobile or desktop platform. This is the base package with the base platform implementations</PackageDescription>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <None Include="..\.editorconfig" Link=".editorconfig" />
-    </ItemGroup>
-    <ItemGroup>
-        <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Benchmarks" />
-        <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Tests" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="DynamicData" />
-      <PackageReference Include="ReactiveMarbles.Extensions" />
-      <PackageReference Include="ReactiveMarbles.Locator" />
-      <PackageReference Include="System.Reactive" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Benchmarks" />
+    <InternalsVisibleTo Include="ReactiveMarbles.Mvvm.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DynamicData" />
+    <PackageReference Include="ReactiveMarbles.Extensions" />
+    <PackageReference Include="ReactiveMarbles.Locator" />
+  </ItemGroup>
 
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
+  </ItemGroup>
 </Project>

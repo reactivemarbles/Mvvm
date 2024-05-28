@@ -42,7 +42,7 @@ public class RxObjectTestFixture : RxObject
     /// </summary>
     public RxObjectTestFixture()
     {
-        TestCollection = new ObservableCollectionExtended<int>();
+        TestCollection = [];
     }
 
     /// <summary>

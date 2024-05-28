@@ -15,10 +15,9 @@ public static class AsValueTestData
     /// Gets test data.
     /// </summary>
     public static IEnumerable<object[]> Data =>
-        new List<object[]>
-        {
-            new object[] { "Leeroy", "Jenkins" },
-            new object[] { "James", "Kirk" },
-            new object[] { "Major", "Payne" },
-        };
+        [
+            ["Leeroy", "Jenkins"],
+            ["James", "Kirk"],
+            ["Major", "Payne"],
+        ];
 }

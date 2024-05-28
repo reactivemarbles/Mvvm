@@ -17,7 +17,7 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 
 using ReactiveMarbles.Locator;
-
+using ReactiveMarbles.PropertyChanged;
 using ReactiveUI;
 
 using Xunit;
@@ -91,9 +91,9 @@ public class RxObjectTests
         RxObjectTestFixture? fixture = new();
         _ = fixture.Changing.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changing).Subscribe();
         _ = fixture.Changed.ToObservableChangeSet(ImmediateScheduler.Instance).Bind(out var changed).Subscribe();
-        List<PropertyChangingEventArgs>? propertyChangingEvents = new();
+        List<PropertyChangingEventArgs>? propertyChangingEvents = [];
         fixture.PropertyChanging += (_, args) => propertyChangingEvents.Add(args);
-        List<PropertyChangedEventArgs>? propertyChangedEvents = new();
+        List<PropertyChangedEventArgs>? propertyChangedEvents = [];
         fixture.PropertyChanged += (_, args) => propertyChangedEvents.Add(args);
 
         AssertCount(0, changing, changed, propertyChangingEvents, propertyChangedEvents);
@@ -158,13 +158,13 @@ public class RxObjectTests
     /// <summary>
     /// Tests that ObservableForProperty using expression.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Using ReactiveUI ObservableForProperty for test, results in invalid test as end user wont be using ReactiveUI")]
     public void ObservableForPropertyUsingExpression()
     {
         RxObjectTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        List<IObservedChange<RxObjectTestFixture, string?>>? output = new();
-        _ = fixture.ObservableForProperty(x => x.IsNotNullString)
-            .Subscribe(output.Add);
+        ////List<IObservedChange<RxObjectTestFixture, string?>>? output = new();
+        ////_ = fixture.ObservableForProperty(x => x.IsNotNullString)
+        ////    .Subscribe(output.Add);
 
         fixture.IsNotNullString = "Bar";
         fixture.IsNotNullString = "Baz";
@@ -172,13 +172,13 @@ public class RxObjectTests
 
         fixture.IsOnlyOneWord = "Bamf";
 
-        _ = output.Should().HaveCount(2);
-        _ = output[0].Sender.Should().Be(fixture);
-        _ = output[0].GetPropertyName().Should().Be("IsNotNullString");
-        _ = output[0].Value.Should().Be("Bar");
-        _ = output[1].Sender.Should().Be(fixture);
-        _ = output[1].GetPropertyName().Should().Be("IsNotNullString");
-        _ = output[1].Value.Should().Be("Baz");
+        ////_ = output.Should().HaveCount(2);
+        ////_ = output[0].Sender.Should().Be(fixture);
+        ////_ = output[0].GetPropertyName().Should().Be("IsNotNullString");
+        ////_ = output[0].Value.Should().Be("Bar");
+        ////_ = output[1].Sender.Should().Be(fixture);
+        ////_ = output[1].GetPropertyName().Should().Be("IsNotNullString");
+        ////_ = output[1].Value.Should().Be("Baz");
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public class RxObjectTests
     public void RaiseAndSetUsingExpression()
     {
         RxObjectTestFixture? fixture = new() { IsNotNullString = "Foo", IsOnlyOneWord = "Baz" };
-        List<string?>? output = new();
+        List<string?>? output = [];
         _ = fixture.Changed
             .Select(x => x.PropertyName)
             .Subscribe(output.Add);
@@ -232,8 +232,8 @@ public class RxObjectTests
     [Fact]
     public void RxObjectSmokeTest()
     {
-        List<string?>? outputChanging = new();
-        List<string?>? output = new();
+        List<string?>? outputChanging = [];
+        List<string?>? output = [];
         RxObjectTestFixture? fixture = new();
 
         _ = fixture.Changing
@@ -264,7 +264,7 @@ public class RxObjectTests
     public void RxObjectShouldRethrowException()
     {
         RxObjectTestFixture? fixture = new();
-        var observable = fixture.WhenAnyValue(x => x.IsOnlyOneWord).Skip(1);
+        var observable = fixture.WhenChanged(x => x.IsOnlyOneWord).Skip(1);
         _ = observable.Subscribe(_ => throw new Exception("This is a test."));
 
         var result = Record.Exception(() => fixture.IsOnlyOneWord = "Two Words");

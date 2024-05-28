@@ -20,7 +20,6 @@
     <PackageVersion Include="ReactiveMarbles.Extensions" Version="1.1.13" />
     <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.44" />
     <PackageVersion Include="ReactiveMarbles.PropertyChanged" Version="2.0.27" />
-    <PackageVersion Include="System.Reactive" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
@@ -34,6 +33,11 @@
     <PackageVersion Include="xunit" Version="2.7.0" />
     <PackageVersion Include="xunit.analyzers" Version="1.11.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
+    <PackageVersion Include="System.Text.Json" Version="8.0.3" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)/directory.packages.support.props" Condition="Exists('$(MSBuildThisFileDirectory)/directory.packages.support.props')" />
 </Project>

@@ -30,9 +30,9 @@
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="xunit" Version="2.8.0" />
-    <PackageVersion Include="xunit.analyzers" Version="1.13.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />
+    <PackageVersion Include="xunit" Version="2.8.1" />
+    <PackageVersion Include="xunit.analyzers" Version="1.14.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">

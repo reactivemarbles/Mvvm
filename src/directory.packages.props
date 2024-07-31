@@ -16,7 +16,7 @@
     <PackageVersion Include="ReactiveUI" Version="20.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="DynamicData" Version="8.4.1" />
+    <PackageVersion Include="DynamicData" Version="9.0.1" />
     <PackageVersion Include="ReactiveMarbles.Extensions" Version="1.1.13" />
     <PackageVersion Include="ReactiveMarbles.Locator" Version="1.1.44" />
     <PackageVersion Include="ReactiveMarbles.PropertyChanged" Version="2.0.27" />

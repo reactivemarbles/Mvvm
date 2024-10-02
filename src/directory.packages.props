@@ -30,8 +30,8 @@
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="xunit" Version="2.9.0" />
-    <PackageVersion Include="xunit.analyzers" Version="1.15.0" />
+    <PackageVersion Include="xunit" Version="2.9.1" />
+    <PackageVersion Include="xunit.analyzers" Version="1.16.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
 

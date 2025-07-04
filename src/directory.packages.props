@@ -12,7 +12,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.2" />
     <PackageVersion Include="ReactiveUI" Version="20.3.1" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
+﻿// Copyright (c) 2019-2025 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -26,10 +26,9 @@ namespace ReactiveMarbles.Mvvm;
 /// <seealso cref="RxObject" />
 /// <seealso cref="IReactiveProperty&lt;T&gt;" />
 [DataContract]
-public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
+public class ReactiveProperty<T> : RxDisposableObject, IReactiveProperty<T>
 {
     private readonly IScheduler _scheduler;
-    private readonly CompositeDisposable _disposables = [];
     private readonly EqualityComparer<T?> _checkIf = EqualityComparer<T?>.Default;
     private readonly Subject<T?> _checkValidation = new();
     private readonly Subject<T?> _valueRefereshed = new();
@@ -38,8 +37,10 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
     private readonly Lazy<List<Func<IObservable<T?>, IObservable<IEnumerable?>>>> _validatorStore = new(() => []);
     private readonly int _skipCurrentValue;
     private readonly bool _isDistinctUntilChanged;
+    private IObservable<T?>? _observable;
     private T? _value;
     private IEnumerable? _currentErrors;
+    private bool _hasSubscribed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReactiveProperty{T}"/> class.
@@ -85,15 +86,11 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
         Value = initialValue;
         _scheduler = scheduler ?? TaskPoolScheduler.Default;
         _errorChanged = new Lazy<BehaviorSubject<IEnumerable?>>(() => new BehaviorSubject<IEnumerable?>(GetErrors(null)));
+        GetSubscription();
     }
 
     /// <inheritdoc/>
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-    /// <summary>
-    /// Gets a value indicating whether gets a value that indicates whether the object is disposed.
-    /// </summary>
-    public bool IsDisposed => _disposables.IsDisposed;
 
     /// <summary>
     /// Gets or sets the value.
@@ -197,7 +194,7 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
                 }
 
                 _errorChanged.Value.OnNext(x);
-            }).DisposeWith(_disposables);
+            }).DisposeWith(Disposables);
         return this;
     }
 
@@ -257,15 +254,6 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
         AddValidationError(xs => xs.Select(x => validator(x)), ignoreInitialError);
 
     /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
     /// Check validation.
     /// </summary>
     public void CheckValidation() => _checkValidation.OnNext(_value);
@@ -276,6 +264,7 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
     public void Refresh()
     {
         SetValue(_value);
+        _valueRefereshed.OnNext(_value);
         RaisePropertyChanged(nameof(Value));
     }
 
@@ -303,23 +292,38 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
     /// A reference to an interface that allows observers to stop receiving notifications before
     /// the provider has finished sending them.
     /// </returns>
-    public IDisposable Subscribe(IObserver<T?> observer) =>
-        this.WhenValueChanged(vm => vm.Value)
-        .Merge(_valueRefereshed)
-        .Skip(_skipCurrentValue)
-        .ObserveOn(_scheduler)
-        .Subscribe(observer)
-        .DisposeWith(_disposables);
+    public IDisposable Subscribe(IObserver<T?> observer)
+    {
+        if (observer == null)
+        {
+            return Disposable.Empty;
+        }
+
+        if (IsDisposed)
+        {
+            observer.OnCompleted();
+            return Disposable.Empty;
+        }
+
+        if (_hasSubscribed)
+        {
+            observer.OnNext(_value);
+        }
+
+        _hasSubscribed = true;
+
+        return _observable!.Subscribe(observer).DisposeWith(Disposables);
+    }
 
     /// <summary>
     /// Releases unmanaged and - optionally - managed resources.
     /// </summary>
     /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-    protected virtual void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
-        if (_disposables?.IsDisposed == false && disposing)
+        base.Dispose(disposing);
+        if (!IsDisposed && disposing)
         {
-            _disposables?.Dispose();
             _checkValidation.Dispose();
             _valueRefereshed.Dispose();
             _validationDisposable.Dispose();
@@ -338,5 +342,21 @@ public class ReactiveProperty<T> : RxObject, IReactiveProperty<T>
         {
             _checkValidation.OnNext(value);
         }
+    }
+
+    private void GetSubscription()
+    {
+        _observable = this.WhenValueChanged(vm => vm.Value)
+            .Skip(_skipCurrentValue);
+
+        if (_isDistinctUntilChanged)
+        {
+            _observable = _observable.DistinctUntilChanged();
+        }
+
+        _observable = _observable.Merge(_valueRefereshed)
+            .Publish()
+            .RefCount()
+            .ObserveOn(_scheduler);
     }
 }

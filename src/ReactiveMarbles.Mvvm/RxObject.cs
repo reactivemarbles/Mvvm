@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2024 ReactiveUI Association Incorporated. All rights reserved.
+// Copyright (c) 2019-2025 ReactiveUI Association Incorporated. All rights reserved.
 // ReactiveUI Association Incorporated licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
@@ -29,7 +29,7 @@ public class RxObject : IRxObject
     private readonly Lazy<ISubject<Exception>> _thrownExceptions = new(
         () => new ProxyScheduledSubject<Exception>(Scheduler.Immediate, ServiceLocator.Current().GetService<ICoreRegistration>().ExceptionHandler), LazyThreadSafetyMode.PublicationOnly);
 
-    private readonly Lazy<Notifications> _notification = new(() => new Notifications());
+    private readonly Lazy<Notifications> _notification = new(() => new());
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RxObject"/> class.

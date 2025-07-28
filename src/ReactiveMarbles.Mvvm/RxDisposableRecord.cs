@@ -10,7 +10,7 @@ namespace ReactiveMarbles.Mvvm;
 /// <summary>
 /// Rx object that extends the <see cref="IDisposable"/> interface.
 /// </summary>
-public class RxDisposableObject : RxObject, ICancelable
+public record RxDisposableRecord : RxRecord, ICancelable
 {
     /// <summary>
     /// Gets a value indicating whether this instance is disposed.

@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
-    <PackageVersion Include="FluentAssertions" Version="8.6.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
     <PackageVersion Include="FluentAssertions.Analyzers" Version="0.34.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.1" />

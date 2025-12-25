@@ -31,8 +31,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.analyzers" Version="1.24.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="xunit.analyzers" Version="1.26.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">

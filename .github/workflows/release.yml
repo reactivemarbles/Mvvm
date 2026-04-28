@@ -44,7 +44,7 @@ jobs:
       run: dotnet build --configuration=${{ env.configuration }} --verbosity=minimal --no-restore
       working-directory: src
 
-    - uses: nuget/setup-nuget@v2
+    - uses: nuget/setup-nuget@v4
       name: Setup NuGet
 
     - name: Pack
